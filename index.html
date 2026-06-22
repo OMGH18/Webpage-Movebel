@@ -7,10 +7,11 @@
   <meta name="description" content="Movebel : chaque pas compte pour ton pays. Marche, fais grimper ta nation au classement mondial." />
   <meta property="og:title" content="Movebel — Marche pour ton pays" />
   <meta property="og:description" content="Chaque pas compte pour ton pays. Grimpe au classement mondial des nations." />
+  <link rel="icon" href="/icon.png" />
   <style>
     :root{
-      --ink:#0E2A26;--muted:#5A7D76;--line:#DCE9E6;--bg:#F4FAF8;--card:#FFFFFF;
-      --brand:#2E8B7B;--brand2:#5BC0A8;
+      --ink:#14213D;--muted:#5B6B8C;--line:#DCE6F4;--bg:#F4F8FF;--card:#FFFFFF;
+      --brand:#2F7FD1;--brand2:#6FB7E0;
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -21,11 +22,13 @@
     .langbtn{border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:6px 14px;font-size:.85rem;cursor:pointer;font-weight:700;transition:.15s}
     .langbtn.active{background:#fff;color:var(--brand);border-color:#fff}
 
-    .hero{position:relative;background:linear-gradient(135deg,#2E8B7B 0%,#5BC0A8 100%);color:#fff;padding:80px 24px 72px;text-align:center;overflow:hidden}
-    .logo{width:84px;height:84px;border-radius:22px;background:rgba(255,255,255,.18);display:inline-grid;place-items:center;font-size:2.6rem;margin-bottom:20px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+    .hero{position:relative;background:linear-gradient(135deg,#5BACD8 0%,#3B82F6 100%);color:#fff;padding:80px 24px 72px;text-align:center;overflow:hidden}
+    .hero::after{content:"";position:absolute;inset:0;background:radial-gradient(110% 90% at 50% -20%,rgba(255,255,255,.30),transparent 60%);pointer-events:none}
+    .hero > *{position:relative;z-index:1}
+    .logo{width:96px;height:96px;border-radius:24px;margin-bottom:22px;box-shadow:0 14px 36px rgba(14,42,38,.28);display:inline-block}
     .hero h1{font-size:2.6rem;margin:0 0 10px;letter-spacing:-.8px}
     .hero p.tag{font-size:1.2rem;opacity:.95;margin:0 auto 28px;max-width:540px}
-    .store-btn{display:inline-flex;align-items:center;gap:10px;background:#0E2A26;color:#fff;text-decoration:none;padding:14px 26px;border-radius:14px;font-weight:700;font-size:1.02rem;box-shadow:0 8px 24px rgba(14,42,38,.25);transition:.15s}
+    .store-btn{display:inline-flex;align-items:center;gap:10px;background:#14213D;color:#fff;text-decoration:none;padding:14px 26px;border-radius:14px;font-weight:700;font-size:1.02rem;box-shadow:0 8px 24px rgba(14,42,38,.25);transition:.15s}
     .store-btn:hover{transform:translateY(-1px)}
     .store-note{display:block;margin-top:12px;font-size:.82rem;opacity:.8}
 
@@ -54,7 +57,7 @@
       <button id="btn-en" class="langbtn" onclick="setLang('en')">EN</button>
     </div></div>
 
-    <div class="logo">🏃</div>
+    <img class="logo" src="/icon.png" alt="Movebel" />
     <h1>Movebel</h1>
     <p class="tag" data-fr="Chaque pas compte pour ton pays. Marche, et fais grimper ta nation au classement mondial."
                    data-en="Every step counts for your country. Walk, and lift your nation up the world leaderboard.">Chaque pas compte pour ton pays. Marche, et fais grimper ta nation au classement mondial.</p>
