@@ -1,128 +1,289 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Privacy Policy — Movebel</title>
+  <title>Politique de confidentialité — Movebel</title>
+  <meta name="description" content="Politique de confidentialité de Movebel — comment nous traitons tes données." />
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 24px; color: #1C3A36; line-height: 1.7; }
-    h1 { font-size: 2rem; margin-bottom: 4px; }
-    .subtitle { color: #5A7D76; margin-bottom: 40px; }
-    h2 { font-size: 1.2rem; margin-top: 40px; border-bottom: 1px solid #D4E5E2; padding-bottom: 8px; }
-    a { color: #2E8B7B; }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 6px; }
-    .updated { font-size: 0.9rem; color: #8BABA4; }
+    :root{
+      --ink:#0E2A26;--muted:#5A7D76;--line:#DCE9E6;--bg:#F4FAF8;--card:#FFFFFF;
+      --brand:#2E8B7B;--brand2:#5BC0A8;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased}
+    .hero{background:linear-gradient(135deg,#2E8B7B 0%,#5BC0A8 100%);color:#fff;padding:44px 24px 40px}
+    .hero-inner{max-width:820px;margin:0 auto}
+    .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem;letter-spacing:-.3px;text-decoration:none;color:#fff}
+    .brand .dot{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:1.1rem}
+    h1{font-size:2.1rem;margin:22px 0 2px;letter-spacing:-.6px}
+    .subtitle{opacity:.92;margin:0;font-size:1.02rem}
+    .updated{opacity:.78;font-size:.85rem;margin-top:8px}
+    .langbar{position:sticky;top:0;z-index:5;background:rgba(244,250,248,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+    .langbar-inner{max-width:820px;margin:0 auto;padding:10px 24px;display:flex;gap:8px;align-items:center;justify-content:flex-end}
+    .langbtn{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:6px 15px;font-size:.85rem;cursor:pointer;font-weight:700;transition:.15s}
+    .langbtn.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+    main{max-width:820px;margin:0 auto;padding:28px 24px 56px}
+    h2{font-size:1.2rem;margin:34px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+    h3{font-size:1rem;margin:20px 0 6px;color:var(--brand)}
+    a{color:var(--brand)}
+    ul{padding-left:20px}li{margin-bottom:6px}
+    footer{border-top:1px solid var(--line);background:#fff}
+    .footer-inner{max-width:820px;margin:0 auto;padding:24px;display:flex;gap:8px 18px;flex-wrap:wrap;align-items:center;justify-content:space-between;color:var(--muted);font-size:.85rem}
+    .footer-links a{margin-right:16px;text-decoration:none}
+    @media(max-width:560px){h1{font-size:1.6rem}.hero{padding:32px 20px}}
   </style>
 </head>
 <body>
 
-<h1>Privacy Policy</h1>
-<p class="subtitle">Movebel — by Djabel Solutions</p>
-<p class="updated">Last updated: May 30, 2026</p>
+  <div class="hero">
+    <div class="hero-inner">
+      <a class="brand" href="/"><span class="dot">🏃</span> Movebel</a>
+      <h1 data-fr="Politique de confidentialité" data-en="Privacy Policy">Politique de confidentialité</h1>
+      <p class="subtitle">Movebel — by Djabel Solutions</p>
+      <p class="updated" data-fr="Dernière mise à jour : 22 juin 2026" data-en="Last updated: June 22, 2026">Dernière mise à jour : 22 juin 2026</p>
+    </div>
+  </div>
 
-<h2>1. Who We Are</h2>
-<p>Movebel is operated by <strong>Djabel Solutions</strong>, a company registered in France. References to "we", "us", or "our" in this policy refer to Djabel Solutions.</p>
-<p>Contact: <a href="mailto:privacy@djabelsolutions.fr">privacy@djabelsolutions.fr</a></p>
+  <div class="langbar">
+    <div class="langbar-inner">
+      <button id="btn-fr" class="langbtn" onclick="setLang('fr')">Français</button>
+      <button id="btn-en" class="langbtn" onclick="setLang('en')">English</button>
+    </div>
+  </div>
 
-<h2>2. What Data We Collect</h2>
-<p>We collect only the data necessary to operate the app.</p>
+  <main>
+    <!-- ───────────── FRANÇAIS ───────────── -->
+    <div id="content-fr">
+      <h2>1. Qui sommes-nous</h2>
+      <p>Movebel est édité par <strong>Djabel Solutions</strong>, société immatriculée en France. Les termes « nous », « notre » dans cette politique désignent Djabel Solutions.</p>
+      <p>Contact : <a href="mailto:support@djabelsolutions.fr">support@djabelsolutions.fr</a></p>
 
-<h3>Account data</h3>
-<ul>
-  <li>Email address (used for authentication)</li>
-  <li>Display name (chosen by you during onboarding)</li>
-  <li>Country of registration (chosen by you, cannot be changed after first steps are submitted)</li>
-  <li>Profile picture (optional, uploaded by you)</li>
-</ul>
+      <h2>2. Données que nous collectons</h2>
+      <p>Nous ne collectons que les données nécessaires au fonctionnement de l'application.</p>
+      <h3>Données de compte</h3>
+      <ul>
+        <li>Adresse e-mail (pour l'authentification)</li>
+        <li>Nom d'affichage (choisi lors de l'inscription)</li>
+        <li>Pays d'inscription (choisi par toi, non modifiable une fois les premiers pas envoyés)</li>
+        <li>Photo de profil (facultative, importée par toi)</li>
+      </ul>
+      <h3>Données de pas</h3>
+      <ul>
+        <li>Nombre de pas quotidiens, lus depuis Apple HealthKit (iOS) ou Google Health Connect (Android)</li>
+        <li>Totaux de pas par jour, agrégés dans la contribution de ton pays au classement</li>
+      </ul>
+      <h3>Données d'activité</h3>
+      <ul>
+        <li>Jours de série (jours consécutifs d'activité)</li>
+        <li>Badges obtenus</li>
+        <li>Dernière date d'activité</li>
+      </ul>
+      <h3>Données techniques</h3>
+      <ul>
+        <li>Rapports de plantage et journaux d'erreurs anonymisés (via Sentry), n'incluant jamais le nombre de pas ni de données de santé</li>
+        <li>Statistiques produit anonymisées (via PostHog), pour comprendre quels écrans sont consultés et où les utilisateurs décrochent. Ces événements ne sont liés ni à ton nom, ni à ton e-mail, ni à un identifiant d'appareil.</li>
+      </ul>
+      <h3>Données d'abonnement</h3>
+      <ul>
+        <li>Si tu souscris à Movebel Premium, ton achat est traité par Apple et géré par notre prestataire d'abonnement (RevenueCat). Movebel ne voit ni ne stocke tes coordonnées bancaires ; nous ne recevons qu'un identifiant pseudonyme et le statut de ton abonnement (actif / expiré).</li>
+      </ul>
 
-<h3>Step data</h3>
-<ul>
-  <li>Daily step counts, read from Apple HealthKit (iOS) or Google Health Connect (Android)</li>
-  <li>Step totals per day, aggregated into your country's leaderboard contribution</li>
-</ul>
+      <h2>3. Ce que nous ne collectons PAS</h2>
+      <ul>
+        <li>Données de localisation</li>
+        <li>Fréquence cardiaque, sommeil, ou toute donnée de santé au-delà des pas</li>
+        <li>Contacts ou graphe social</li>
+        <li>Identifiants publicitaires (IDFA, GAID)</li>
+        <li>Données publicitaires de quelque nature que ce soit</li>
+      </ul>
 
-<h3>Activity data</h3>
-<ul>
-  <li>Streak days (consecutive days of activity)</li>
-  <li>Badges earned</li>
-  <li>Last active date</li>
-</ul>
+      <h2>4. Comment nous utilisons tes données</h2>
+      <ul>
+        <li><strong>Faire fonctionner l'app :</strong> authentifier ton compte, enregistrer tes pas, calculer le classement de ton pays</li>
+        <li><strong>Personnaliser ton expérience :</strong> afficher tes badges, séries et rang</li>
+        <li><strong>Améliorer l'app :</strong> analyser les rapports de plantage anonymisés</li>
+      </ul>
+      <p>Nous n'utilisons pas tes données à des fins publicitaires, de profilage, ni de revente à des tiers.</p>
 
-<h3>Technical data</h3>
-<ul>
-  <li>Anonymized crash reports and error logs (via Sentry), which never include step counts or health data</li>
-  <li>Anonymized product analytics (via PostHog), used to understand which screens are viewed and where users drop off. We do not link these events to your name, email, or any device identifier.</li>
-</ul>
+      <h2>5. Partage de tes données</h2>
+      <p>Ton nom d'affichage et le drapeau de ton pays apparaissent publiquement dans le classement. Ton nombre de pas est agrégé au niveau du pays — les pas individuels ne sont jamais montrés aux autres utilisateurs.</p>
+      <p>Nous faisons appel aux sous-traitants suivants :</p>
+      <ul>
+        <li><strong>Supabase</strong> (base de données et authentification) — données hébergées dans l'UE</li>
+        <li><strong>Sentry</strong> (suivi des erreurs) — reçoit uniquement des données de plantage anonymisées ; hébergé dans l'UE</li>
+        <li><strong>PostHog</strong> (statistiques produit anonymes) — reçoit uniquement des événements pseudonymes, sans identifiant personnel ; hébergé dans l'UE</li>
+        <li><strong>RevenueCat</strong> (gestion des abonnements) — reçoit uniquement un identifiant pseudonyme et le statut d'abonnement ; aucune donnée bancaire ne transite par nos systèmes</li>
+      </ul>
+      <p>Nous ne vendons, ne louons ni ne partageons tes données personnelles avec aucun autre tiers.</p>
+      <p>Tu peux refuser les statistiques produit anonymes à tout moment depuis la bannière de consentement, ou via Profil → Confidentialité.</p>
 
-<h3>Subscription data</h3>
-<ul>
-  <li>If you subscribe to Movebel Premium, your purchase is processed by Apple and managed by our subscription provider (RevenueCat). Movebel never sees or stores your payment card details; we only receive a pseudonymous user identifier and the status of your subscription (active / expired).</li>
-</ul>
+      <h2>6. Données de santé (HealthKit / Google Health Connect)</h2>
+      <p>Movebel demande un accès en lecture seule à ton nombre de pas. Nous n'écrivons jamais dans HealthKit ou Google Health Connect. Les données de santé servent uniquement à calculer ta contribution au classement et ne sont jamais partagées avec des tiers ni utilisées à des fins publicitaires, conformément aux règles HealthKit d'Apple et aux politiques Google Health Connect.</p>
 
-<h2>3. What We Do NOT Collect</h2>
-<ul>
-  <li>Location data</li>
-  <li>Heart rate, sleep, or any health data beyond step counts</li>
-  <li>Contacts or social graph</li>
-  <li>Device identifiers (IDFA, GAID)</li>
-  <li>Advertising data of any kind</li>
-</ul>
+      <h2>7. Conservation des données</h2>
+      <ul>
+        <li>Tes données de compte sont conservées tant que ton compte est actif</li>
+        <li>Les enregistrements de pas quotidiens sont conservés jusqu'à 2 ans</li>
+        <li>Lorsque tu supprimes ton compte, toutes tes données personnelles sont définitivement effacées sous 30 jours</li>
+      </ul>
 
-<h2>4. How We Use Your Data</h2>
-<ul>
-  <li><strong>To operate the app:</strong> authenticate your account, record your steps, compute your country's leaderboard ranking</li>
-  <li><strong>To personalize your experience:</strong> display your badges, streaks, and rank</li>
-  <li><strong>To improve the app:</strong> analyze anonymized crash reports</li>
-</ul>
-<p>We do not use your data for advertising, profiling, or sale to third parties.</p>
+      <h2>8. Tes droits (RGPD)</h2>
+      <p>Si tu résides dans l'Espace économique européen, tu disposes des droits suivants :</p>
+      <ul>
+        <li><strong>Accès :</strong> demander une copie de tes données (disponible dans l'app via Profil → Exporter mes données)</li>
+        <li><strong>Rectification :</strong> modifier ton nom d'affichage ou ta photo de profil dans l'app</li>
+        <li><strong>Effacement :</strong> supprimer ton compte dans l'app via Profil → Supprimer le compte</li>
+        <li><strong>Portabilité :</strong> exporter tes données au format JSON dans l'app</li>
+        <li><strong>Opposition :</strong> nous contacter à <a href="mailto:support@djabelsolutions.fr">support@djabelsolutions.fr</a></li>
+      </ul>
+      <p>Tu peux aussi introduire une réclamation auprès de ton autorité de protection des données (en France : <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>).</p>
 
-<h2>5. How Your Data Is Shared</h2>
-<p>Your display name and country flag appear publicly in the leaderboard. Your step count is aggregated at country level — individual step counts are never shown to other users.</p>
-<p>We use the following sub-processors:</p>
-<ul>
-  <li><strong>Supabase</strong> (database and authentication) — data hosted in the EU</li>
-  <li><strong>Sentry</strong> (error monitoring) — receives anonymized crash data only; hosted in the EU</li>
-  <li><strong>PostHog</strong> (anonymous product analytics) — receives pseudonymous event data only, no personal identifiers; hosted in the EU</li>
-  <li><strong>RevenueCat</strong> (subscription management) — receives a pseudonymous user identifier and subscription status only; no payment card data passes through our systems</li>
-</ul>
-<p>We do not sell, rent, or share your personal data with any other third party.</p>
-<p>You can opt out of anonymous product analytics at any time from the in-app consent banner, or from Profile → Privacy settings.</p>
+      <h2>9. Confidentialité des mineurs</h2>
+      <p>Movebel ne s'adresse pas aux enfants de moins de 13 ans. Nous ne collectons pas sciemment de données personnelles d'enfants de moins de 13 ans. Si tu penses qu'un enfant nous a fourni des données, contacte-nous et nous les supprimerons rapidement.</p>
 
-<h2>6. Health Data (HealthKit / Google Health Connect)</h2>
-<p>Movebel requests read-only access to your step count. We do not write to HealthKit or Google Health Connect. Health data is used solely to compute your contribution to the leaderboard and is never shared with third parties or used for advertising purposes, in compliance with Apple's HealthKit guidelines and Google Health Connect policies.</p>
+      <h2>10. Sécurité</h2>
+      <p>Nous appliquons des mesures de sécurité standard : stockage chiffré des identifiants (iOS Keychain / Android Keystore), HTTPS pour toutes les communications, et sécurité au niveau des lignes (Row-Level Security) sur notre base de données. Aucune méthode de transmission sur internet n'est sûre à 100 %, et nous ne pouvons garantir une sécurité absolue.</p>
 
-<h2>7. Data Retention</h2>
-<ul>
-  <li>Your account data is retained for as long as your account is active</li>
-  <li>Daily step records are retained for up to 2 years</li>
-  <li>When you delete your account, all your personal data is permanently deleted within 30 days</li>
-</ul>
+      <h2>11. Modifications de cette politique</h2>
+      <p>Nous pouvons mettre à jour cette politique de temps à autre. Nous t'informerons des changements importants par notification dans l'app ou par e-mail. La date « dernière mise à jour » en haut de cette page reflète la révision la plus récente.</p>
 
-<h2>8. Your Rights (GDPR)</h2>
-<p>If you are located in the European Economic Area, you have the following rights:</p>
-<ul>
-  <li><strong>Access:</strong> request a copy of your data (available in-app via Profile → Export my data)</li>
-  <li><strong>Rectification:</strong> update your display name or profile picture in-app</li>
-  <li><strong>Erasure:</strong> delete your account in-app via Profile → Delete account</li>
-  <li><strong>Portability:</strong> export your data in JSON format in-app</li>
-  <li><strong>Objection:</strong> contact us at <a href="mailto:privacy@djabelsolutions.fr">privacy@djabelsolutions.fr</a></li>
-</ul>
-<p>You may also lodge a complaint with your local data protection authority (in France: <a href="https://www.cnil.fr" target="_blank">CNIL</a>).</p>
+      <h2>12. Contact</h2>
+      <p>Pour toute question ou demande relative à la confidentialité :<br />
+      <strong>Djabel Solutions</strong><br />
+      <a href="mailto:support@djabelsolutions.fr">support@djabelsolutions.fr</a></p>
+    </div>
 
-<h2>9. Children's Privacy</h2>
-<p>Movebel is not directed at children under the age of 13. We do not knowingly collect personal data from children under 13. If you believe a child has provided us with personal data, please contact us and we will delete it promptly.</p>
+    <!-- ───────────── ENGLISH ───────────── -->
+    <div id="content-en" style="display:none">
+      <h2>1. Who We Are</h2>
+      <p>Movebel is operated by <strong>Djabel Solutions</strong>, a company registered in France. References to "we", "us", or "our" in this policy refer to Djabel Solutions.</p>
+      <p>Contact: <a href="mailto:support@djabelsolutions.fr">support@djabelsolutions.fr</a></p>
 
-<h2>10. Security</h2>
-<p>We implement industry-standard security measures including encrypted storage of credentials (iOS Keychain / Android Keystore), HTTPS for all communications, and row-level security on our database. No method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.</p>
+      <h2>2. What Data We Collect</h2>
+      <p>We collect only the data necessary to operate the app.</p>
+      <h3>Account data</h3>
+      <ul>
+        <li>Email address (used for authentication)</li>
+        <li>Display name (chosen by you during onboarding)</li>
+        <li>Country of registration (chosen by you, cannot be changed after first steps are submitted)</li>
+        <li>Profile picture (optional, uploaded by you)</li>
+      </ul>
+      <h3>Step data</h3>
+      <ul>
+        <li>Daily step counts, read from Apple HealthKit (iOS) or Google Health Connect (Android)</li>
+        <li>Step totals per day, aggregated into your country's leaderboard contribution</li>
+      </ul>
+      <h3>Activity data</h3>
+      <ul>
+        <li>Streak days (consecutive days of activity)</li>
+        <li>Badges earned</li>
+        <li>Last active date</li>
+      </ul>
+      <h3>Technical data</h3>
+      <ul>
+        <li>Anonymized crash reports and error logs (via Sentry), which never include step counts or health data</li>
+        <li>Anonymized product analytics (via PostHog), used to understand which screens are viewed and where users drop off. We do not link these events to your name, email, or any device identifier.</li>
+      </ul>
+      <h3>Subscription data</h3>
+      <ul>
+        <li>If you subscribe to Movebel Premium, your purchase is processed by Apple and managed by our subscription provider (RevenueCat). Movebel never sees or stores your payment card details; we only receive a pseudonymous user identifier and the status of your subscription (active / expired).</li>
+      </ul>
 
-<h2>11. Changes to This Policy</h2>
-<p>We may update this policy from time to time. We will notify you of material changes via in-app notice or email. The "last updated" date at the top of this page reflects the most recent revision.</p>
+      <h2>3. What We Do NOT Collect</h2>
+      <ul>
+        <li>Location data</li>
+        <li>Heart rate, sleep, or any health data beyond step counts</li>
+        <li>Contacts or social graph</li>
+        <li>Device identifiers (IDFA, GAID)</li>
+        <li>Advertising data of any kind</li>
+      </ul>
 
-<h2>12. Contact</h2>
-<p>For any privacy-related questions or requests:<br />
-<strong>Djabel Solutions</strong><br />
-<a href="mailto:privacy@djabelsolutions.fr">privacy@djabelsolutions.fr</a></p>
+      <h2>4. How We Use Your Data</h2>
+      <ul>
+        <li><strong>To operate the app:</strong> authenticate your account, record your steps, compute your country's leaderboard ranking</li>
+        <li><strong>To personalize your experience:</strong> display your badges, streaks, and rank</li>
+        <li><strong>To improve the app:</strong> analyze anonymized crash reports</li>
+      </ul>
+      <p>We do not use your data for advertising, profiling, or sale to third parties.</p>
 
+      <h2>5. How Your Data Is Shared</h2>
+      <p>Your display name and country flag appear publicly in the leaderboard. Your step count is aggregated at country level — individual step counts are never shown to other users.</p>
+      <p>We use the following sub-processors:</p>
+      <ul>
+        <li><strong>Supabase</strong> (database and authentication) — data hosted in the EU</li>
+        <li><strong>Sentry</strong> (error monitoring) — receives anonymized crash data only; hosted in the EU</li>
+        <li><strong>PostHog</strong> (anonymous product analytics) — receives pseudonymous event data only, no personal identifiers; hosted in the EU</li>
+        <li><strong>RevenueCat</strong> (subscription management) — receives a pseudonymous user identifier and subscription status only; no payment card data passes through our systems</li>
+      </ul>
+      <p>We do not sell, rent, or share your personal data with any other third party.</p>
+      <p>You can opt out of anonymous product analytics at any time from the in-app consent banner, or from Profile → Privacy settings.</p>
+
+      <h2>6. Health Data (HealthKit / Google Health Connect)</h2>
+      <p>Movebel requests read-only access to your step count. We do not write to HealthKit or Google Health Connect. Health data is used solely to compute your contribution to the leaderboard and is never shared with third parties or used for advertising purposes, in compliance with Apple's HealthKit guidelines and Google Health Connect policies.</p>
+
+      <h2>7. Data Retention</h2>
+      <ul>
+        <li>Your account data is retained for as long as your account is active</li>
+        <li>Daily step records are retained for up to 2 years</li>
+        <li>When you delete your account, all your personal data is permanently deleted within 30 days</li>
+      </ul>
+
+      <h2>8. Your Rights (GDPR)</h2>
+      <p>If you are located in the European Economic Area, you have the following rights:</p>
+      <ul>
+        <li><strong>Access:</strong> request a copy of your data (available in-app via Profile → Export my data)</li>
+        <li><strong>Rectification:</strong> update your display name or profile picture in-app</li>
+        <li><strong>Erasure:</strong> delete your account in-app via Profile → Delete account</li>
+        <li><strong>Portability:</strong> export your data in JSON format in-app</li>
+        <li><strong>Objection:</strong> contact us at <a href="mailto:support@djabelsolutions.fr">support@djabelsolutions.fr</a></li>
+      </ul>
+      <p>You may also lodge a complaint with your local data protection authority (in France: <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>).</p>
+
+      <h2>9. Children's Privacy</h2>
+      <p>Movebel is not directed at children under the age of 13. We do not knowingly collect personal data from children under 13. If you believe a child has provided us with personal data, please contact us and we will delete it promptly.</p>
+
+      <h2>10. Security</h2>
+      <p>We implement industry-standard security measures including encrypted storage of credentials (iOS Keychain / Android Keystore), HTTPS for all communications, and row-level security on our database. No method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.</p>
+
+      <h2>11. Changes to This Policy</h2>
+      <p>We may update this policy from time to time. We will notify you of material changes via in-app notice or email. The "last updated" date at the top of this page reflects the most recent revision.</p>
+
+      <h2>12. Contact</h2>
+      <p>For any privacy-related questions or requests:<br />
+      <strong>Djabel Solutions</strong><br />
+      <a href="mailto:support@djabelsolutions.fr">support@djabelsolutions.fr</a></p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© 2026 Djabel Solutions — Movebel</span>
+      <span class="footer-links">
+        <a href="/">Accueil</a>
+        <a href="/terms">Terms / CGU</a>
+        <a href="mailto:support@djabelsolutions.fr">support@djabelsolutions.fr</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    function setLang(l){
+      var fr=document.getElementById('content-fr'), en=document.getElementById('content-en');
+      fr.style.display = l==='fr' ? 'block':'none';
+      en.style.display = l==='en' ? 'block':'none';
+      document.getElementById('btn-fr').classList.toggle('active', l==='fr');
+      document.getElementById('btn-en').classList.toggle('active', l==='en');
+      document.documentElement.lang = l;
+      document.querySelectorAll('[data-fr]').forEach(function(el){ el.textContent = el.getAttribute('data-'+l); });
+      try{ localStorage.setItem('movebel_legal_lang', l); }catch(e){}
+    }
+    (function(){
+      var saved=null; try{ saved=localStorage.getItem('movebel_legal_lang'); }catch(e){}
+      var l = saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0 ? 'fr':'en');
+      setLang(l);
+    })();
+  </script>
 </body>
 </html>

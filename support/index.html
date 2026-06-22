@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movebel — Marche pour ton pays</title>
+  <meta name="description" content="Movebel : chaque pas compte pour ton pays. Marche, fais grimper ta nation au classement mondial." />
+  <meta property="og:title" content="Movebel — Marche pour ton pays" />
+  <meta property="og:description" content="Chaque pas compte pour ton pays. Grimpe au classement mondial des nations." />
+  <style>
+    :root{
+      --ink:#0E2A26;--muted:#5A7D76;--line:#DCE9E6;--bg:#F4FAF8;--card:#FFFFFF;
+      --brand:#2E8B7B;--brand2:#5BC0A8;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased}
+
+    .langbar{position:absolute;top:0;right:0;z-index:5}
+    .langbar-inner{padding:16px 24px;display:flex;gap:8px}
+    .langbtn{border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:6px 14px;font-size:.85rem;cursor:pointer;font-weight:700;transition:.15s}
+    .langbtn.active{background:#fff;color:var(--brand);border-color:#fff}
+
+    .hero{position:relative;background:linear-gradient(135deg,#2E8B7B 0%,#5BC0A8 100%);color:#fff;padding:80px 24px 72px;text-align:center;overflow:hidden}
+    .logo{width:84px;height:84px;border-radius:22px;background:rgba(255,255,255,.18);display:inline-grid;place-items:center;font-size:2.6rem;margin-bottom:20px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+    .hero h1{font-size:2.6rem;margin:0 0 10px;letter-spacing:-.8px}
+    .hero p.tag{font-size:1.2rem;opacity:.95;margin:0 auto 28px;max-width:540px}
+    .store-btn{display:inline-flex;align-items:center;gap:10px;background:#0E2A26;color:#fff;text-decoration:none;padding:14px 26px;border-radius:14px;font-weight:700;font-size:1.02rem;box-shadow:0 8px 24px rgba(14,42,38,.25);transition:.15s}
+    .store-btn:hover{transform:translateY(-1px)}
+    .store-note{display:block;margin-top:12px;font-size:.82rem;opacity:.8}
+
+    main{max-width:920px;margin:0 auto;padding:64px 24px}
+    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+    .feature{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px;box-shadow:0 1px 2px rgba(16,42,38,.04)}
+    .feature .ico{font-size:1.8rem;margin-bottom:10px}
+    .feature h3{margin:0 0 6px;font-size:1.08rem}
+    .feature p{margin:0;color:var(--muted);font-size:.95rem}
+
+    .support{text-align:center;margin-top:56px;padding:32px;background:var(--card);border:1px solid var(--line);border-radius:18px}
+    .support h2{margin:0 0 8px;font-size:1.3rem}
+    .support a{color:var(--brand);font-weight:700}
+
+    footer{border-top:1px solid var(--line);background:#fff}
+    .footer-inner{max-width:920px;margin:0 auto;padding:24px;display:flex;gap:8px 18px;flex-wrap:wrap;align-items:center;justify-content:space-between;color:var(--muted);font-size:.85rem}
+    .footer-links a{margin-right:16px;text-decoration:none;color:var(--brand)}
+    @media(max-width:560px){.hero h1{font-size:2rem}.hero{padding:64px 20px 56px}}
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="langbar"><div class="langbar-inner">
+      <button id="btn-fr" class="langbtn" onclick="setLang('fr')">FR</button>
+      <button id="btn-en" class="langbtn" onclick="setLang('en')">EN</button>
+    </div></div>
+
+    <div class="logo">🏃</div>
+    <h1>Movebel</h1>
+    <p class="tag" data-fr="Chaque pas compte pour ton pays. Marche, et fais grimper ta nation au classement mondial."
+                   data-en="Every step counts for your country. Walk, and lift your nation up the world leaderboard.">Chaque pas compte pour ton pays. Marche, et fais grimper ta nation au classement mondial.</p>
+    <!-- Remplace le href par l'URL App Store une fois l'app publiée -->
+    <a class="store-btn" href="#" id="storeBtn"> Télécharger sur l'App Store</a>
+    <span class="store-note" data-fr="Bientôt disponible sur iOS." data-en="Coming soon on iOS.">Bientôt disponible sur iOS.</span>
+  </div>
+
+  <main>
+    <div class="features">
+      <div class="feature">
+        <div class="ico">🌍</div>
+        <h3 data-fr="Marche pour ton pays" data-en="Walk for your country">Marche pour ton pays</h3>
+        <p data-fr="Tes pas sont synchronisés depuis ton téléphone et convertis en kilomètres pour ta nation."
+           data-en="Your steps sync from your phone and turn into kilometres for your nation.">Tes pas sont synchronisés depuis ton téléphone et convertis en kilomètres pour ta nation.</p>
+      </div>
+      <div class="feature">
+        <div class="ico">🏆</div>
+        <h3 data-fr="Classement mondial" data-en="World leaderboard">Classement mondial</h3>
+        <p data-fr="Ton pays affronte le monde entier dans une course de pas mise à jour en temps réel."
+           data-en="Your country takes on the whole world in a real-time step race.">Ton pays affronte le monde entier dans une course de pas mise à jour en temps réel.</p>
+      </div>
+      <div class="feature">
+        <div class="ico">🔥</div>
+        <h3 data-fr="Séries, badges & défis" data-en="Streaks, badges & challenges">Séries, badges &amp; défis</h3>
+        <p data-fr="Garde ta série, débloque des badges, monte en grade et défie tes amis."
+           data-en="Keep your streak, unlock badges, climb the ranks and challenge your friends.">Garde ta série, débloque des badges, monte en grade et défie tes amis.</p>
+      </div>
+    </div>
+
+    <div class="support">
+      <h2 data-fr="Besoin d'aide ?" data-en="Need help?">Besoin d'aide&nbsp;?</h2>
+      <p data-fr="Une question, un souci, une demande ? Écris-nous :" data-en="A question, an issue, a request? Email us:">Une question, un souci, une demande&nbsp;? Écris-nous&nbsp;:</p>
+      <p><a href="mailto:support@djabelsolutions.fr">support@djabelsolutions.fr</a></p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© 2026 Djabel Solutions — Movebel</span>
+      <span class="footer-links">
+        <a href="/privacy" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+        <a href="/terms" data-fr="Conditions" data-en="Terms">Conditions</a>
+        <a href="mailto:support@djabelsolutions.fr">support@djabelsolutions.fr</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    function setLang(l){
+      document.getElementById('btn-fr').classList.toggle('active', l==='fr');
+      document.getElementById('btn-en').classList.toggle('active', l==='en');
+      document.documentElement.lang = l;
+      document.querySelectorAll('[data-fr]').forEach(function(el){ el.textContent = el.getAttribute('data-'+l); });
+      try{ localStorage.setItem('movebel_legal_lang', l); }catch(e){}
+    }
+    (function(){
+      var saved=null; try{ saved=localStorage.getItem('movebel_legal_lang'); }catch(e){}
+      var l = saved || ((navigator.language||'en').toLowerCase().indexOf('fr')===0 ? 'fr':'en');
+      setLang(l);
+    })();
+  </script>
+</body>
+</html>
