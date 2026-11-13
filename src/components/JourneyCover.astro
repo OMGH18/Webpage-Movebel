@@ -2,16 +2,19 @@
 // Carte postale d'un voyage (même dessin que dans l'app).
 import { sceneFor } from '../data/scenes'
 
-interface Props { id: string; class?: string }
-const { id, class: cls } = Astro.props
+interface Props { id: string; class?: string; align?: "xMin" | "xMid" | "xMax" }
+const { id, class: cls, align = "xMid" } = Astro.props
 const s = sceneFor(id)
 const gid = `sky-${id}-${Math.random().toString(36).slice(2, 7)}`
 ---
 
-<svg class:list={['jcover', cls]} viewBox="0 0 100 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<svg class:list={['jcover', cls]} viewBox="0 0 100 60" preserveAspectRatio={`${align}YMid slice`} aria-hidden="true">
   <defs>
     <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color={s.sky[0]} /><stop offset=".55" stop-color={s.sky[1]} /><stop offset="1" stop-color={s.sky[2]} />
+    </linearGradient>
+    <linearGradient id="mistg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0" /><stop offset=".5" stop-color="#fff" stop-opacity=".7" /><stop offset="1" stop-color="#fff" stop-opacity="0" />
     </linearGradient>
   </defs>
   <rect width="100" height="60" fill={`url(#${gid})`} />
