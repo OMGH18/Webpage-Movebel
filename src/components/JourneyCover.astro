@@ -1,26 +1,38 @@
 ---
-// Carte postale d'un voyage (même dessin que dans l'app).
+// Couverture d'un voyage. Si une image existe dans src/assets/journeys/<id>.(webp|jpg|png),
+// elle est utilisée (optimisée par Astro) ; sinon on retombe sur le paysage SVG.
+import { Image } from 'astro:assets'
 import { sceneFor } from '../data/scenes'
 
-interface Props { id: string; class?: string; align?: "xMin" | "xMid" | "xMax" }
-const { id, class: cls, align = "xMid" } = Astro.props
+interface Props { id: string; class?: string; align?: 'xMin' | 'xMid' | 'xMax'; width?: number }
+const { id, class: cls, align = 'xMid', width = 800 } = Astro.props
+
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/journeys/*.{webp,jpg,jpeg,png}', { eager: true })
+const photo = Object.entries(files).find(([path]) => path.split('/').pop()!.replace(/\.[^.]+$/, '') === id)?.[1].default
+const pos = { xMin: '0% 50%', xMid: '50% 50%', xMax: '100% 50%' }[align]
+
 const s = sceneFor(id)
 const gid = `sky-${id}-${Math.random().toString(36).slice(2, 7)}`
 ---
 
-<svg class:list={['jcover', cls]} viewBox="0 0 100 60" preserveAspectRatio={`${align}YMid slice`} aria-hidden="true">
-  <defs>
-    <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color={s.sky[0]} /><stop offset=".55" stop-color={s.sky[1]} /><stop offset="1" stop-color={s.sky[2]} />
-    </linearGradient>
-    <linearGradient id="mistg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#fff" stop-opacity="0" /><stop offset=".5" stop-color="#fff" stop-opacity=".7" /><stop offset="1" stop-color="#fff" stop-opacity="0" />
-    </linearGradient>
-  </defs>
-  <rect width="100" height="60" fill={`url(#${gid})`} />
-  <Fragment set:html={s.body} />
-</svg>
+{photo ? (
+  <Image class:list={['jcover', 'jphoto', cls]} src={photo} alt="" width={width} quality={72} style={`object-position:${pos}`} />
+) : (
+  <svg class:list={['jcover', cls]} viewBox="0 0 100 60" preserveAspectRatio={`${align}YMid slice`} aria-hidden="true">
+    <defs>
+      <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color={s.sky[0]} /><stop offset=".55" stop-color={s.sky[1]} /><stop offset="1" stop-color={s.sky[2]} />
+      </linearGradient>
+      <linearGradient id="mistg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity="0" /><stop offset=".5" stop-color="#fff" stop-opacity=".7" /><stop offset="1" stop-color="#fff" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="60" fill={`url(#${gid})`} />
+    <Fragment set:html={s.body} />
+  </svg>
+)}
 
 <style>
   .jcover { display: block; width: 100%; height: 100%; }
+  .jphoto { object-fit: cover; }
 </style>
