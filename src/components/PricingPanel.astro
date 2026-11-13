@@ -1,0 +1,121 @@
+---
+import { FACTS, JOURNEYS, PRICES, formatPrice, type Lang } from '../data/product'
+import { ROUTES } from '../i18n/ui'
+
+interface Props { lang: Lang; showDetailsLink?: boolean }
+const { lang, showDetailsLink = true } = Astro.props
+const fr = lang === 'fr'
+const p = (v: number) => formatPrice(v, lang)
+const save = Math.round((1 - PRICES.yearly / (PRICES.monthly * 12)) * 100)
+
+const c = fr
+  ? {
+      monthly: 'Mensuel', yearly: 'Annuel', save: `-${save} %`,
+      free: {
+        name: 'Gratuit', price: p(0), sub: 'Pour toujours',
+        items: ['Tes pas comptent pour ton pays', 'Classement mondial, séries, badges et grades', `Le voyage Lumière (${FACTS.freeJourneyKm} km)`, `${FACTS.challengeFree.active} défi actif, jusqu’à ${FACTS.challengeFree.members} marcheurs`, 'Rejoindre les défis de tes amis'],
+        cta: 'Commencer gratuitement',
+      },
+      premium: {
+        name: 'Movebel+', badge: 'Recommandé', perMonth: '/mois', perYear: '/an',
+        yearlyNote: `soit ${p(PRICES.yearlyPerMonth)} par mois`, monthlyNote: 'Sans engagement',
+        items: [`Les ${JOURNEYS.length} voyages et le passeport de tampons`, `${FACTS.challengePremium.active} défis actifs, jusqu’à ${FACTS.challengePremium.members} marcheurs`, 'Un bouclier par mois pour protéger ta série', 'Le QG en entier et les archives des saisons', 'Tout ce qui est gratuit'],
+        cta: 'Passer à Movebel+',
+      },
+      trust: ['Sans engagement', 'Résiliable à tout moment depuis ton compte Apple', 'Rejoindre un défi est gratuit'],
+      details: 'Détail complet des prix',
+      note: 'Prix de référence en France. L’App Store affiche le prix exact dans ta devise avant l’achat.',
+    }
+  : {
+      monthly: 'Monthly', yearly: 'Yearly', save: `-${save}%`,
+      free: {
+        name: 'Free', price: p(0), sub: 'Forever',
+        items: ['Your steps count for your country', 'Global leaderboard, streaks, badges and ranks', `The Lumière journey (${FACTS.freeJourneyKm} km)`, `${FACTS.challengeFree.active} active challenge, up to ${FACTS.challengeFree.members} walkers`, 'Join your friends’ challenges'],
+        cta: 'Start for free',
+      },
+      premium: {
+        name: 'Movebel+', badge: 'Recommended', perMonth: '/month', perYear: '/year',
+        yearlyNote: `that's ${p(PRICES.yearlyPerMonth)} per month`, monthlyNote: 'No commitment',
+        items: [`All ${JOURNEYS.length} journeys and the stamp passport`, `${FACTS.challengePremium.active} active challenges, up to ${FACTS.challengePremium.members} walkers`, 'One shield a month to protect your streak', 'The full HQ and season archives', 'Everything in Free'],
+        cta: 'Get Movebel+',
+      },
+      trust: ['No commitment', 'Cancel anytime from your Apple account', 'Joining a challenge is free'],
+      details: 'Full pricing details',
+      note: 'Reference prices in France. The App Store shows the exact price in your currency before you buy.',
+    }
+---
+
+<div class="pricing" data-plan="yearly">
+  <div class="toggle" role="group" aria-label={fr ? 'Période de facturation' : 'Billing period'}>
+    <button type="button" data-set="monthly">{c.monthly}</button>
+    <button type="button" data-set="yearly" aria-pressed="true">{c.yearly} <span class="save">{c.save}</span></button>
+  </div>
+
+  <div class="plans">
+    <div class="card plan">
+      <h3>{c.free.name}</h3>
+      <p class="price"><b>{c.free.price}</b></p>
+      <p class="sub">{c.free.sub}</p>
+      <ul class="check">{c.free.items.map((i) => <li>{i}</li>)}</ul>
+      <a class="btn btn-ghost plan-cta" href="#download">{c.free.cta}</a>
+    </div>
+    <div class="card plan hl-plan">
+      <span class="tag ribbon">{c.premium.badge}</span>
+      <h3>{c.premium.name}</h3>
+      <p class="price">
+        <b class="y">{p(PRICES.yearly)}</b><b class="m">{p(PRICES.monthly)}</b>
+        <span class="y">{c.premium.perYear}</span><span class="m">{c.premium.perMonth}</span>
+      </p>
+      <p class="sub"><span class="y">{c.premium.yearlyNote}</span><span class="m">{c.premium.monthlyNote}</span></p>
+      <ul class="check">{c.premium.items.map((i) => <li>{i}</li>)}</ul>
+      <a class="btn btn-primary plan-cta" href="#download">{c.premium.cta}</a>
+    </div>
+  </div>
+
+  <ul class="trust">{c.trust.map((tr) => <li>{tr}</li>)}</ul>
+  <p class="foot">
+    {showDetailsLink && <a href={ROUTES.pricing[lang]}>{c.details} →</a>}
+    <span>{c.note}</span>
+  </p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.pricing').forEach((box) => {
+    const btns = box.querySelectorAll<HTMLButtonElement>('.toggle button')
+    btns.forEach((b) =>
+      b.addEventListener('click', () => {
+        box.dataset.plan = b.dataset.set
+        btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)))
+      }),
+    )
+  })
+</script>
+
+<style>
+  .toggle { display: inline-flex; gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: 999px; }
+  .toggle button { font: inherit; font-weight: 600; font-size: 14px; border: 0; cursor: pointer; padding: 8px 16px; border-radius: 999px; background: transparent; color: var(--muted); }
+  .toggle button[aria-pressed='true'] { background: var(--accent); color: #fff; }
+  .save { font-size: 11px; font-weight: 800; color: #1e1b4b; background: var(--gold); border-radius: 999px; padding: 1px 6px; margin-left: 4px; }
+  .plans { display: grid; gap: 12px; margin-top: 18px; max-width: 900px; }
+  @media (min-width: 760px) { .plans { grid-template-columns: 1fr 1fr; gap: 16px; } }
+  .plan { position: relative; padding: 24px 22px 22px; display: flex; flex-direction: column; }
+  .hl-plan {
+    border-color: rgba(124, 58, 237, 0.6);
+    background: radial-gradient(120% 70% at 50% 0%, rgba(124, 58, 237, 0.28), transparent 70%), var(--surface-2);
+    box-shadow: 0 20px 50px rgba(124, 58, 237, 0.2), var(--elev-1);
+  }
+  .ribbon { position: absolute; right: 18px; top: 20px; }
+  .plan h3 { font-family: var(--font-display); font-weight: 600; font-size: 18px; }
+  .price { margin: 12px 0 0; display: flex; align-items: baseline; gap: 6px; }
+  .price b { font-family: var(--font-brand); font-weight: 900; font-size: clamp(38px, 4vw, 50px); letter-spacing: -0.03em; line-height: 1; }
+  .price span { color: var(--muted); }
+  .sub { margin: 6px 0 0; color: var(--gold); font-size: 14px; font-weight: 600; }
+  .plan .check { margin: 18px 0 22px; flex: 1; }
+  .plan-cta { width: 100%; }
+  .pricing[data-plan='yearly'] .m, .pricing[data-plan='monthly'] .y { display: none; }
+  .trust { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px 22px; color: var(--muted); font-size: 14px; }
+  .trust li { display: inline-flex; align-items: center; gap: 8px; }
+  .trust li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .foot { margin: 10px 0 0; font-size: 13px; color: var(--faint); display: flex; flex-wrap: wrap; gap: 4px 16px; }
+  .foot a { color: var(--text); font-weight: 600; font-size: 14px; text-decoration: none; }
+</style>

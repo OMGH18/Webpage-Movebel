@@ -1,0 +1,68 @@
+---
+// Pages légales au design du site. Le texte est repris tel quel de l'ancien
+// site (src/content/legal/*.html), identique aux fichiers de l'app (legal/).
+import Base from '../layouts/Base.astro'
+import privacyFr from '../content/legal/privacy-fr.html?raw'
+import privacyEn from '../content/legal/privacy-en.html?raw'
+import termsFr from '../content/legal/terms-fr.html?raw'
+import termsEn from '../content/legal/terms-en.html?raw'
+import { PUBLISHER, type Lang } from '../data/product'
+import { ROUTES } from '../i18n/ui'
+import { breadcrumbs, webPage } from '../data/schema'
+
+interface Props { lang: Lang; doc: 'privacy' | 'terms' }
+const { lang, doc } = Astro.props
+const fr = lang === 'fr'
+const docs = {
+  privacy: { fr: { title: 'Politique de confidentialité', html: privacyFr }, en: { title: 'Privacy Policy', html: privacyEn } },
+  terms: { fr: { title: "Conditions d'utilisation", html: termsFr }, en: { title: 'Terms of Use', html: termsEn } },
+}
+const d = docs[doc][lang]
+const updated = fr ? 'Dernière mise à jour : 22 juin 2026' : 'Last updated: June 22, 2026'
+const path = ROUTES[doc][lang]
+const tabs = [
+  { href: ROUTES.terms[lang], label: fr ? "Conditions d'utilisation" : 'Terms of use', key: 'terms' },
+  { href: ROUTES.privacy[lang], label: fr ? 'Confidentialité' : 'Privacy', key: 'privacy' },
+  { href: ROUTES.support[lang], label: fr ? 'Assistance' : 'Support', key: 'support' },
+]
+const description = fr ? `${d.title} de l'application Movebel, éditée par ${PUBLISHER.name}.` : `${d.title} for the Movebel app, published by ${PUBLISHER.name}.`
+const jsonLd = [webPage(path, `${d.title} — Movebel`, lang), breadcrumbs([{ name: 'Movebel', path: ROUTES.home[lang] }, { name: d.title, path }])]
+---
+
+<Base lang={lang} title={`${d.title} — Movebel`} description={description} path={path} alternates={{ fr: ROUTES[doc].fr, en: ROUTES[doc].en }} jsonLd={jsonLd}>
+  <section class="section">
+    <div class="wrap doc">
+      <nav class="crumbs" aria-label={fr ? "Fil d'Ariane" : 'Breadcrumb'}><a href={ROUTES.home[lang]}>Movebel</a> / <span>{d.title}</span></nav>
+      <h1 class="display">{d.title}</h1>
+      <p class="updated">{updated}</p>
+      <nav class="tabs" aria-label={fr ? 'Documents' : 'Documents'}>
+        {tabs.map((tb) => <a href={tb.href} aria-current={tb.key === doc ? 'page' : undefined}>{tb.label}</a>)}
+      </nav>
+      <article class="legal-body" set:html={d.html} />
+      <p class="contact">Contact{fr ? ' : ' : ': '}<a href={`mailto:${PUBLISHER.email}`}>{PUBLISHER.email}</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .doc { max-width: 820px; }
+  .crumbs { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+  .crumbs a { color: var(--muted); text-decoration: none; }
+  .crumbs span { color: var(--text); }
+  .doc h1 { font-size: clamp(32px, 4.6vw, 50px); }
+  .updated { color: var(--faint); font-size: 14px; margin: 12px 0 0; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 8px; }
+  .tabs a { font-size: 14px; font-weight: 600; text-decoration: none; color: var(--muted); padding: 7px 13px; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--surface); }
+  .tabs a:hover { color: var(--text); }
+  .tabs a[aria-current='page'] { color: #fff; background: var(--accent); border-color: var(--accent); }
+  .legal-body :global(h2) { font-family: var(--font-display); font-weight: 600; font-size: 20px; letter-spacing: -0.01em; margin: 34px 0 0; padding-top: 22px; border-top: 1px solid var(--border); }
+  .legal-body :global(h3) { font-family: var(--font-display); font-weight: 600; font-size: 16px; margin: 18px 0 0; }
+  .legal-body :global(p), .legal-body :global(li), .legal-body :global(td), .legal-body :global(th) { color: var(--muted); font-size: 15.5px; line-height: 1.65; }
+  .legal-body :global(p) { margin: 10px 0; }
+  .legal-body :global(ul), .legal-body :global(ol) { margin: 10px 0; padding-left: 20px; display: grid; gap: 6px; }
+  .legal-body :global(li::marker) { color: var(--accent); }
+  .legal-body :global(strong) { color: var(--text); font-weight: 600; }
+  .legal-body :global(a) { color: var(--accent-hot); }
+  .legal-body :global(table) { min-width: 0; margin: 12px 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .contact { margin-top: 30px; color: var(--muted); }
+</style>

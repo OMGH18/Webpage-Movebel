@@ -1,0 +1,147 @@
+---
+// Éventail de l'ouverture : trois écrans types de Movebel (voyage, classement
+// des pays, défi entre amis). Illustrations, pas de vraies données.
+import { Image } from 'astro:assets'
+import map from '../assets/art/map-monde.jpg'
+import { FACTS, formatNumber, type Lang } from '../data/product'
+
+interface Props { lang: Lang }
+const { lang } = Astro.props
+const fr = lang === 'fr'
+const n = (v: number) => formatNumber(v, lang)
+// Drapeaux dessinés en CSS (les drapeaux emoji ne s'affichent pas sous Windows).
+const ranking = [
+  { name: fr ? 'Japon' : 'Japan', flag: 'jp', pct: 92 },
+  { name: 'France', flag: 'fr', pct: 86, me: true },
+  { name: fr ? 'Allemagne' : 'Germany', flag: 'de', pct: 79 },
+  { name: fr ? 'Italie' : 'Italy', flag: 'it', pct: 71 },
+]
+const members = [
+  { i: 'L', c: '#f97316', pct: 100 },
+  { i: 'M', c: '#d946ef', pct: 82 },
+  { i: 'S', c: '#3b82f6', pct: 64 },
+  { i: 'A', c: '#10b981', pct: 41 },
+]
+---
+
+<div class="fan" aria-hidden="true">
+  <div class="holo c-left">
+    <div class="face">
+      <div class="art trip">
+        <Image class="bg" src={map} alt="" width={460} loading="eager" />
+        <svg class="route" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M18 78 C 30 40, 52 70, 62 42 S 84 22, 86 18" /></svg>
+        <span class="stop s1"></span><span class="stop s2"></span><span class="stop s3 now"></span><span class="stop s4"></span>
+        <span class="city">Lyon · 910 km</span>
+      </div>
+      <div class="foot"><b>Tour de France</b><small>{n(910)} / {n(2400)} km</small><span class="bar"><i style="width:38%"></i></span></div>
+    </div>
+  </div>
+  <div class="holo c-right">
+    <div class="face">
+      <div class="art challenge">
+        <p class="ct">{fr ? 'Défi entre amis' : 'Friends challenge'}</p>
+        <ul>
+          {members.map((m) => (
+            <li><span class="av" style={`--c:${m.c}`}>{m.i}</span><span class="bar"><i style={`width:${m.pct}%;background:${m.c}`}></i></span></li>
+          ))}
+        </ul>
+      </div>
+      <div class="foot"><b>{fr ? `Défi ${FACTS.challengeTemplate.days} jours` : `${FACTS.challengeTemplate.days}-day challenge`}</b><small>{n(FACTS.challengeTemplate.steps)} {fr ? 'pas chacun' : 'steps each'}</small></div>
+    </div>
+  </div>
+  <div class="holo c-mid">
+    <div class="face">
+      <div class="art rank">
+        <p class="ct">{fr ? 'Classement mondial' : 'Global leaderboard'}</p>
+        <ol>
+          {ranking.map((r, k) => (
+            <li class:list={{ me: r.me }}>
+              <span class="pos">{k + 1}</span><span class={`flag ${r.flag}`}></span>
+              <span class="nm">{r.name}</span>
+              <span class="bar"><i style={`width:${r.pct}%`}></i></span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div class="foot"><b>{fr ? 'Ton pays' : 'Your country'}</b><small>{fr ? 'Tes pas comptent pour la France' : 'Your steps count for France'}</small></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @property --a { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+  .fan { --w: clamp(140px, 19vw, 240px); --sx: 72%; --sy: 15%; position: relative; width: 100%; height: calc(var(--w) * 1.66); }
+  @media (max-width: 520px) { .fan { --sx: 64%; --sy: 24%; height: calc(var(--w) * 1.82); } }
+  .holo {
+    position: absolute; left: calc(50% - var(--w) / 2); top: 3%; width: var(--w);
+    padding: 3px; border-radius: 22px;
+    background: conic-gradient(from var(--a), #f97316, #d946ef, #7c3aed, #3b82f6, #10b981, #f97316);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 44px rgba(124, 58, 237, 0.25);
+    animation: holo 8s linear infinite;
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  @keyframes holo { to { --a: 360deg; } }
+  .c-left { transform: translateX(calc(-1 * var(--sx))) translateY(var(--sy)) rotate(-9deg); }
+  .c-right { transform: translateX(var(--sx)) translateY(var(--sy)) rotate(9deg); }
+  .c-right .foot, .c-right .ct { text-align: right; }
+  .c-mid { transform: translateY(-2%); z-index: 2; }
+  .fan:hover .c-left { transform: translateX(calc(-1 * var(--sx) - 8%)) translateY(calc(var(--sy) - 2%)) rotate(-12deg); }
+  .fan:hover .c-right { transform: translateX(calc(var(--sx) + 8%)) translateY(calc(var(--sy) - 2%)) rotate(12deg); }
+  .fan:hover .c-mid { transform: translateY(-5%); }
+
+  .face { position: relative; overflow: hidden; border-radius: 19px; background: var(--surface); }
+  .face::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.5) 45%, rgba(96, 165, 250, 0.35) 52%, transparent 65%) -120% 0 / 250% 100% no-repeat;
+    animation: shine 6s ease-in-out infinite;
+  }
+  .c-left .face::after { animation-delay: 1.2s; }
+  .c-right .face::after { animation-delay: 2.4s; }
+  @keyframes shine { 0%, 55% { background-position: 120% 0; } 100% { background-position: -120% 0; } }
+
+  .art { position: relative; aspect-ratio: 1; overflow: hidden; padding: calc(var(--w) * 0.07); }
+  .ct { margin: 0 0 calc(var(--w) * 0.04); font-family: var(--font-display); font-weight: 600; font-size: calc(var(--w) * 0.058); color: var(--muted); }
+  .bar { display: block; height: calc(var(--w) * 0.03); border-radius: 99px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 99px; background: var(--grad); }
+  .foot { display: grid; gap: 2px; padding: 10px 13px 12px; border-top: 1px solid var(--border); }
+  .foot b { font-family: var(--font-brand); font-weight: 900; font-size: calc(var(--w) * 0.082); line-height: 1.15; color: var(--text); }
+  .foot small { font-size: calc(var(--w) * 0.052); color: var(--faint); font-weight: 500; }
+  .foot .bar { margin-top: 5px; }
+
+  /* Classement */
+  .rank { background: radial-gradient(90% 70% at 50% 0%, rgba(59, 130, 246, 0.28), transparent 70%), #141030; }
+  .rank ol { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(var(--w) * 0.03); }
+  .rank li { display: grid; grid-template-columns: auto auto 1fr; grid-template-rows: auto auto; align-items: center; column-gap: calc(var(--w) * 0.03); row-gap: 3px; padding: calc(var(--w) * 0.025) calc(var(--w) * 0.035); border-radius: 10px; background: rgba(255, 255, 255, 0.04); }
+  .rank li.me { background: rgba(249, 115, 22, 0.16); box-shadow: inset 0 0 0 1.5px rgba(249, 115, 22, 0.7); }
+  .pos { grid-row: span 2; font-family: var(--font-brand); font-weight: 900; font-size: calc(var(--w) * 0.07); color: var(--faint); width: 1.1em; }
+  .me .pos { color: var(--accent-hot); }
+  .flag { grid-row: span 2; width: calc(var(--w) * 0.1); height: calc(var(--w) * 0.068); border-radius: 3px; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3); }
+  .flag.fr { background: linear-gradient(90deg, #1f4fa3 33.3%, #fff 33.3% 66.6%, #e1252f 66.6%); }
+  .flag.it { background: linear-gradient(90deg, #138c45 33.3%, #fff 33.3% 66.6%, #cf2734 66.6%); }
+  .flag.de { background: linear-gradient(180deg, #111 33.3%, #dd1f26 33.3% 66.6%, #fccf15 66.6%); }
+  .flag.jp { background: radial-gradient(circle at 50% 50%, #d32030 28%, #fff 29%); }
+  .nm { font-weight: 700; font-size: calc(var(--w) * 0.056); color: var(--text); line-height: 1; }
+  .rank .bar { height: calc(var(--w) * 0.022); }
+
+  /* Voyage */
+  .trip { padding: 0; background: #0f1b3a; }
+  .trip :global(.bg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 48% 30%; transform: scale(2.2); transform-origin: 48% 32%; opacity: 0.55; filter: saturate(0.8) hue-rotate(10deg); }
+  .trip::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13, 11, 30, 0.2), rgba(13, 11, 30, 0.7)); }
+  .route { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .route path { fill: none; stroke: #fb923c; stroke-width: 1.6; stroke-dasharray: 3 2.5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .stop { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25); transform: translate(-50%, -50%); }
+  .s1 { left: 18%; top: 78%; } .s2 { left: 40%; top: 56%; } .s3 { left: 62%; top: 42%; } .s4 { left: 86%; top: 18%; background: rgba(255, 255, 255, 0.5); }
+  .stop.now { width: 13px; height: 13px; background: var(--accent); box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.35), 0 0 18px rgba(249, 115, 22, 0.8); }
+  .city { position: absolute; left: 56%; top: 49%; font-size: calc(var(--w) * 0.05); font-weight: 700; color: #fff; background: rgba(13, 11, 30, 0.8); padding: 2px 7px; border-radius: 6px; white-space: nowrap; transform: translateX(-30%); }
+
+  /* Défi */
+  .challenge { background: radial-gradient(90% 70% at 50% 0%, rgba(217, 70, 239, 0.25), transparent 70%), #17112e; }
+  .challenge ul { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(var(--w) * 0.05); }
+  .challenge li { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: calc(var(--w) * 0.04); }
+  .av { width: calc(var(--w) * 0.12); height: calc(var(--w) * 0.12); border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: calc(var(--w) * 0.055); color: #fff; background: var(--c); }
+  .challenge .bar { height: calc(var(--w) * 0.035); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .holo, .face::after { animation: none; }
+  }
+</style>

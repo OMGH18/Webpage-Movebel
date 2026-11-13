@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro'
+import Faq from './Faq.astro'
+import { PUBLISHER, SITE, type Lang } from '../data/product'
+import { ROUTES } from '../i18n/ui'
+import { breadcrumbs, faqPage, webPage } from '../data/schema'
+
+interface Props { lang: Lang }
+const { lang } = Astro.props
+const fr = lang === 'fr'
+const path = ROUTES.support[lang]
+
+const c = fr
+  ? {
+      title: 'Assistance Movebel : aide et contact',
+      description: 'Besoin d’aide avec Movebel ? Pas qui ne se synchronisent pas, abonnement Movebel+, défis, suppression de compte : les réponses et le contact.',
+      h1: 'Besoin d’aide ?',
+      lede: 'Les réponses aux questions les plus fréquentes. Si tu ne trouves pas, écris-nous : on répond par e-mail.',
+      mailT: 'Écris-nous',
+      mailB: 'Une question, un bug, une idée ? Indique ton pseudo et le modèle de ton iPhone, ça nous aide à répondre vite.',
+      faqTitle: 'Questions fréquentes',
+      faq: [
+        { q: 'Mes pas ne s’affichent pas ou ne se mettent pas à jour', a: 'Movebel lit tes pas dans Apple Santé. Vérifie que l’accès est autorisé : Réglages de l’iPhone > Santé > Accès aux données et appareils > Movebel, puis active les pas. Rouvre ensuite Movebel pour relancer la synchronisation.' },
+        { q: 'Comment résilier Movebel+ ?', a: 'L’abonnement est géré par Apple : Réglages de l’iPhone > ton nom > Abonnements > Movebel, au moins 24 heures avant la fin de la période en cours. Movebel+ reste actif jusqu’à la fin de la période payée.' },
+        { q: 'J’ai payé Movebel+ mais je n’y ai pas accès', a: 'Ouvre l’écran Movebel+ dans l’app et appuie sur « Restaurer mon achat ». Ne relance pas un nouvel achat. Si le problème continue, écris-nous avec la date de l’achat.' },
+        { q: 'Comment rejoindre le défi d’un ami ?', a: 'Ouvre le lien d’invitation qu’il t’a envoyé, ou saisis son code d’invitation dans la section Défis de l’app. Rejoindre un défi est toujours gratuit.' },
+        { q: 'Comment exporter ou supprimer mes données ?', a: 'Dans l’app, va dans ton profil : « Exporter mes données » pour récupérer une copie, « Supprimer le compte » pour tout effacer. La suppression est définitive. Si tu as Movebel+, résilie aussi l’abonnement dans ton compte Apple.' },
+        { q: 'Movebel existe-t-il sur Android ?', a: 'Pas pour l’instant : Movebel est disponible sur iPhone.' },
+      ],
+    }
+  : {
+      title: 'Movebel support: help and contact',
+      description: 'Need help with Movebel? Steps not syncing, Movebel+ subscription, challenges, account deletion: answers and contact.',
+      h1: 'Need help?',
+      lede: 'Answers to the most common questions. If you can’t find yours, email us: we reply by email.',
+      mailT: 'Email us',
+      mailB: 'A question, a bug, an idea? Include your nickname and your iPhone model, it helps us answer quickly.',
+      faqTitle: 'FAQ',
+      faq: [
+        { q: 'My steps don’t show or don’t update', a: 'Movebel reads your steps from Apple Health. Check that access is allowed: iPhone Settings > Health > Data Access & Devices > Movebel, then turn on Steps. Then reopen Movebel to sync again.' },
+        { q: 'How do I cancel Movebel+?', a: 'The subscription is managed by Apple: iPhone Settings > your name > Subscriptions > Movebel, at least 24 hours before the end of the current period. Movebel+ stays active until the end of the paid period.' },
+        { q: 'I paid for Movebel+ but don’t have access', a: 'Open the Movebel+ screen in the app and tap “Restore purchase”. Don’t buy again. If the problem persists, email us with the purchase date.' },
+        { q: 'How do I join a friend’s challenge?', a: 'Open the invite link they sent you, or enter their invite code in the app’s Challenges section. Joining a challenge is always free.' },
+        { q: 'How do I export or delete my data?', a: 'In the app, go to your profile: “Export my data” to get a copy, “Delete account” to erase everything. Deletion is permanent. If you have Movebel+, also cancel the subscription in your Apple account.' },
+        { q: 'Is Movebel on Android?', a: 'Not yet: Movebel is available on iPhone.' },
+      ],
+    }
+const jsonLd = [
+  webPage(path, c.title, lang),
+  breadcrumbs([{ name: 'Movebel', path: ROUTES.home[lang] }, { name: c.h1, path }]),
+  faqPage(`${SITE}${path}#faq`, c.faq),
+]
+---
+
+<Base lang={lang} title={c.title} description={c.description} path={path} alternates={{ fr: ROUTES.support.fr, en: ROUTES.support.en }} jsonLd={jsonLd}>
+  <section class="section top">
+    <div class="wrap">
+      <nav class="crumbs" aria-label={fr ? "Fil d'Ariane" : 'Breadcrumb'}><a href={ROUTES.home[lang]}>Movebel</a> / <span>{c.h1}</span></nav>
+      <div class="section-head">
+        <h1 class="display">{c.h1}</h1>
+        <p class="lede">{c.lede}</p>
+      </div>
+      <a class="panel mail" href={`mailto:${PUBLISHER.email}`}>
+        <span class="mi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" /></svg></span>
+        <span><b>{c.mailT}</b><span class="addr">{PUBLISHER.email}</span><small>{c.mailB}</small></span>
+      </a>
+    </div>
+  </section>
+  <Faq items={c.faq} title={c.faqTitle} />
+</Base>
+
+<style>
+  .crumbs { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+  .crumbs a { color: var(--muted); text-decoration: none; }
+  .crumbs span { color: var(--text); }
+  .mail { display: flex; gap: 16px; align-items: flex-start; padding: 22px 24px; text-decoration: none; color: var(--text); max-width: 720px; transition: border-color 0.15s; }
+  .mail:hover { border-color: var(--accent); color: var(--text); }
+  .mi { width: 46px; height: 46px; flex: none; display: grid; place-items: center; border-radius: 14px; background: var(--brand-subtle); color: var(--accent-hot); }
+  .mi svg { width: 24px; height: 24px; }
+  .mail b { display: block; font-family: var(--font-display); font-weight: 600; font-size: 18px; }
+  .addr { display: block; color: var(--accent-hot); font-weight: 600; margin-top: 2px; }
+  .mail small { display: block; color: var(--muted); font-size: 14px; margin-top: 6px; }
+</style>

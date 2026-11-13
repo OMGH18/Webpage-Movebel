@@ -1,0 +1,389 @@
+---
+import { Image } from 'astro:assets'
+import Base from '../layouts/Base.astro'
+import StoreButtons from './StoreButtons.astro'
+import PricingPanel from './PricingPanel.astro'
+import Faq from './Faq.astro'
+import CtaBand from './CtaBand.astro'
+import CardFan from './CardFan.astro'
+import stadium from '../assets/art/stadium.png'
+import map from '../assets/art/map-monde.jpg'
+import mascotGold from '../assets/art/mascot-gold.png'
+import { FACTS, JOURNEYS, PRICES, SITE, formatNumber, formatPrice, type Lang } from '../data/product'
+import { ROUTES } from '../i18n/ui'
+import { app, faqPage, organization, website } from '../data/schema'
+
+interface Props { lang: Lang }
+const { lang } = Astro.props
+const fr = lang === 'fr'
+const p = (v: number) => formatPrice(v, lang)
+const n = (v: number) => formatNumber(v, lang)
+const longest = JOURNEYS[JOURNEYS.length - 1]
+
+const c = fr
+  ? {
+      title: 'Movebel : marche pour ton pays, gratuit sur iPhone',
+      description: `Movebel transforme tes pas en points pour ton pays : classement mondial entre ${FACTS.countries} pays, défis entre amis et voyages à pied. Gratuit sur iPhone, avec Apple Santé.`,
+      h1a: 'Tu ne peux pas marquer pour ton pays.',
+      h1b: 'Mais tu peux marcher pour lui.',
+      lede: `Movebel est une app iPhone gratuite qui transforme tes pas en points pour ton pays.`,
+      lede2: `Ton pays affronte ${FACTS.countries} nations au classement mondial, et chaque marche compte.`,
+      howCta: 'Comment ça marche',
+      trust: [
+        { t: 'Gratuit', s: 'Movebel+ en option', svg: 'M20 12v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8M2 8h20v4H2zM12 21V8m0 0H7.5a2.5 2.5 0 1 1 0-5C11 3 12 8 12 8Zm0 0h4.5a2.5 2.5 0 1 0 0-5C13 3 12 8 12 8Z' },
+        { t: `${FACTS.countries} pays`, s: 'Un seul classement mondial', svg: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm-9 9h18M12 3c2.6 2.8 3.9 5.8 3.9 9s-1.3 6.2-3.9 9c-2.6-2.8-3.9-5.8-3.9-9S9.4 5.8 12 3Z' },
+        { t: 'Apple Santé', s: 'Tes pas, sans rien saisir', svg: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z' },
+      ],
+      howTitle: 'Trois étapes, puis tu marches.',
+      steps: [
+        { t: 'Choisis ton pays', s: `${FACTS.countries} nations au choix. Tu le représenteras au classement mondial.` },
+        { t: 'Connecte Apple Santé', s: 'Tes pas se synchronisent tout seuls, sans saisie.' },
+        { t: 'Marche comme d’habitude', s: 'Chaque pas validé fait monter ton pays au classement.' },
+      ],
+      feats: [
+        { t: 'Ta série', s: 'Atteins ton objectif chaque jour et garde la flamme. Avec Movebel+, un bouclier par mois protège un jour manqué.', mock: 'streak' },
+        { t: 'Badges et grades', s: 'Tes premiers 10 000 pas, tes séries, tes saisons : chaque palier se débloque en marchant.', mock: 'badges' },
+        { t: 'Le widget', s: 'Tes pas du jour sur l’écran d’accueil, sans ouvrir l’app.', mock: 'widget' },
+      ],
+      streakLabel: 'jours de suite',
+      widgetLabel: 'pas aujourd’hui',
+      badges: ['10 000 pas', '7 jours', 'Saison'],
+      shows: [
+        { title: 'Classement mondial', capT: 'Ton pays contre le reste du monde', capS: 'Le classement bouge avec les pas de chaque marcheur.' },
+        { title: 'Voyages', capT: 'Tes pas deviennent un voyage', capS: `Du Chemin de l’Inca à la Route de la soie, ${n(longest.km)} km.` },
+        { title: 'Défis', capT: 'Qui marche le plus cette semaine ?', capS: 'Crée un défi, envoie le lien, suivez-vous.' },
+      ],
+      journeysTitle: `${JOURNEYS.length} voyages à faire à pied`,
+      journeysSub: `Tes vrais pas te font avancer sur un vrai parcours, étape par étape. Lumière est gratuit ; les autres voyages font partie de Movebel+.`,
+      free: 'Gratuit', seasonal: 'Saisonnier',
+      chTitleA: 'Tes amis,', chTitleB: 'ton meilleur coach.',
+      chBody: `Crée un défi en quelques secondes (par défaut ${FACTS.challengeTemplate.days} jours et ${n(FACTS.challengeTemplate.steps)} pas chacun), partage le lien, et voyez qui tient la distance.`,
+      chList: [
+        `Gratuit : ${FACTS.challengeFree.active} défi actif, jusqu’à ${FACTS.challengeFree.members} marcheurs`,
+        `Movebel+ : ${FACTS.challengePremium.active} défis actifs, jusqu’à ${FACTS.challengePremium.members} marcheurs`,
+        'Rejoindre le défi d’un ami est toujours gratuit',
+        `Un ami parrainé : +${n(FACTS.referralBonusSteps)} pas bonus pour vous deux`,
+      ],
+      priceTitleA: 'Gratuit pour marcher.', priceTitleB: 'Movebel+ pour voyager.',
+      faqTitle: 'Questions fréquentes',
+      faq: [
+        { q: 'Movebel est-il gratuit ?', a: `Oui. Choisir ton pays, faire monter son classement, garder ta série, gagner des badges, faire le voyage Lumière et créer un défi entre amis sont gratuits. Movebel+ (${p(PRICES.monthly)} par mois ou ${p(PRICES.yearly)} par an, prix en France) ajoute les autres voyages, des défis plus grands et le bouclier de série.` },
+        { q: 'Comment mes pas sont-ils comptés ?', a: 'Movebel lit ton nombre de pas dans Apple Santé, avec ton autorisation. Tu n’as rien à saisir : tes pas du jour s’ajoutent au total de ton pays.' },
+        { q: 'Movebel est-il disponible sur Android ?', a: 'Pas pour l’instant : Movebel est disponible sur iPhone, en français et en anglais.' },
+        { q: 'Comment fonctionnent les voyages ?', a: `Tu choisis un parcours réel (Tour de France, Route 66, Chemin de Compostelle…) et tes pas te font avancer d’étape en étape. Un voyage est actif à la fois. Lumière (${FACTS.freeJourneyKm} km) est gratuit, les autres sont inclus dans Movebel+.` },
+        { q: 'Comment fonctionne un défi entre amis ?', a: `Tu fixes un objectif et des dates, tu partages le lien d’invitation, et chacun voit la progression du groupe. En gratuit, un défi actif jusqu’à ${FACTS.challengeFree.members} marcheurs ; avec Movebel+, jusqu’à ${FACTS.challengePremium.active} défis et ${FACTS.challengePremium.members} marcheurs. Rejoindre un défi est gratuit.` },
+        { q: 'Que se passe-t-il si je rate un jour ?', a: 'Ta série repart à zéro. Avec Movebel+, un bouclier par mois peut protéger un seul jour manqué, si tu valides tes pas dès le lendemain.' },
+      ],
+    }
+  : {
+      title: 'Movebel: step up for your country, free on iPhone',
+      description: `Movebel turns your steps into points for your country: a leaderboard across ${FACTS.countries} countries, challenges with friends and walking journeys. Free on iPhone.`,
+      h1a: 'You can’t score for your country.',
+      h1b: 'But you can walk for it.',
+      lede: 'Movebel is a free iPhone app that turns your steps into points for your country.',
+      lede2: `Your country takes on ${FACTS.countries} nations on the global leaderboard, and every walk counts.`,
+      howCta: 'How it works',
+      trust: [
+        { t: 'Free', s: 'Movebel+ is optional', svg: 'M20 12v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8M2 8h20v4H2zM12 21V8m0 0H7.5a2.5 2.5 0 1 1 0-5C11 3 12 8 12 8Zm0 0h4.5a2.5 2.5 0 1 0 0-5C13 3 12 8 12 8Z' },
+        { t: `${FACTS.countries} countries`, s: 'One global leaderboard', svg: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm-9 9h18M12 3c2.6 2.8 3.9 5.8 3.9 9s-1.3 6.2-3.9 9c-2.6-2.8-3.9-5.8-3.9-9S9.4 5.8 12 3Z' },
+        { t: 'Apple Health', s: 'Your steps, no typing', svg: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z' },
+      ],
+      howTitle: 'Three steps, then you walk.',
+      steps: [
+        { t: 'Pick your country', s: `${FACTS.countries} nations to choose from. You represent it on the global leaderboard.` },
+        { t: 'Connect Apple Health', s: 'Your steps sync on their own, nothing to type.' },
+        { t: 'Walk as usual', s: 'Every validated step pushes your country up the leaderboard.' },
+      ],
+      feats: [
+        { t: 'Your streak', s: 'Hit your goal every day and keep the flame alive. With Movebel+, one shield a month protects a missed day.', mock: 'streak' },
+        { t: 'Badges and ranks', s: 'Your first 10,000 steps, your streaks, your seasons: every milestone unlocks as you walk.', mock: 'badges' },
+        { t: 'The widget', s: 'Today’s steps on your home screen, without opening the app.', mock: 'widget' },
+      ],
+      streakLabel: 'days in a row',
+      widgetLabel: 'steps today',
+      badges: ['10,000 steps', '7 days', 'Season'],
+      shows: [
+        { title: 'Global leaderboard', capT: 'Your country against the world', capS: 'The leaderboard moves with every walker’s steps.' },
+        { title: 'Journeys', capT: 'Your steps become a journey', capS: `From the Inca Trail to the Silk Road, ${n(longest.km)} km.` },
+        { title: 'Challenges', capT: 'Who walks the most this week?', capS: 'Create a challenge, send the link, keep up with each other.' },
+      ],
+      journeysTitle: `${JOURNEYS.length} journeys to walk`,
+      journeysSub: 'Your real steps move you along a real route, stage by stage. Lumière is free; the other journeys come with Movebel+.',
+      free: 'Free', seasonal: 'Seasonal',
+      chTitleA: 'Your friends,', chTitleB: 'your best coach.',
+      chBody: `Create a challenge in seconds (${FACTS.challengeTemplate.days} days and ${n(FACTS.challengeTemplate.steps)} steps each by default), share the link, and see who goes the distance.`,
+      chList: [
+        `Free: ${FACTS.challengeFree.active} active challenge, up to ${FACTS.challengeFree.members} walkers`,
+        `Movebel+: ${FACTS.challengePremium.active} active challenges, up to ${FACTS.challengePremium.members} walkers`,
+        'Joining a friend’s challenge is always free',
+        `Invite a friend: +${n(FACTS.referralBonusSteps)} bonus steps for both of you`,
+      ],
+      priceTitleA: 'Free to walk.', priceTitleB: 'Movebel+ to travel.',
+      faqTitle: 'FAQ',
+      faq: [
+        { q: 'Is Movebel free?', a: `Yes. Picking your country, pushing it up the leaderboard, keeping your streak, earning badges, walking the Lumière journey and creating a challenge with friends are free. Movebel+ (${p(PRICES.monthly)} per month or ${p(PRICES.yearly)} per year, prices in France) adds the other journeys, bigger challenges and the streak shield.` },
+        { q: 'How are my steps counted?', a: 'Movebel reads your step count from Apple Health, with your permission. Nothing to type: today’s steps add to your country’s total.' },
+        { q: 'Is Movebel available on Android?', a: 'Not yet: Movebel is available on iPhone, in English and French.' },
+        { q: 'How do journeys work?', a: `You pick a real route (Tour de France, Route 66, Camino de Santiago…) and your steps move you from stage to stage. One journey is active at a time. Lumière (${FACTS.freeJourneyKm} km) is free, the others come with Movebel+.` },
+        { q: 'How does a challenge with friends work?', a: `You set a goal and dates, share the invite link, and everyone sees the group’s progress. Free: one active challenge with up to ${FACTS.challengeFree.members} walkers; with Movebel+, up to ${FACTS.challengePremium.active} challenges and ${FACTS.challengePremium.members} walkers. Joining a challenge is free.` },
+        { q: 'What if I miss a day?', a: 'Your streak resets. With Movebel+, one shield a month can protect a single missed day, if you validate your steps the next day.' },
+      ],
+    }
+
+const path = ROUTES.home[lang]
+const jsonLd = [organization(), website(), app(lang), faqPage(`${SITE}${path}#faq`, c.faq)]
+const avatars = [
+  { i: 'L', c: '#f97316' }, { i: 'M', c: '#d946ef' }, { i: 'S', c: '#3b82f6' }, { i: 'A', c: '#10b981' }, { i: 'J', c: '#fbbf24' },
+]
+---
+
+<Base lang={lang} title={c.title} description={c.description} path={path} alternates={{ fr: ROUTES.home.fr, en: ROUTES.home.en }} jsonLd={jsonLd}>
+  <div class="wrap stack">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"><Image src={stadium} alt="" width={1100} quality={60} loading="eager" /></div>
+      <div class="hero-copy">
+        <h1 class="display">{c.h1a} <span class="hl">{c.h1b}</span></h1>
+        <p class="hero-lede"><strong>{c.lede}</strong> {c.lede2}</p>
+        <StoreButtons lang={lang} note={false}>
+          <a class="btn btn-ghost try" href="#how">{c.howCta} <span aria-hidden="true">↓</span></a>
+        </StoreButtons>
+        <ul class="trust">
+          {c.trust.map((tr) => (
+            <li>
+              <span class="ti"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={tr.svg} fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+              <span><b>{tr.t}</b><small>{tr.s}</small></span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="hero-art"><CardFan lang={lang} /></div>
+    </section>
+
+    <!-- COMMENT ÇA MARCHE + FONCTIONNALITÉS -->
+    <section class="bento" id="how">
+      <article class="how reveal">
+        <div class="how-body">
+          <h2 class="display">{c.howTitle}</h2>
+          <ol class="steps">
+            {c.steps.map((st, i) => (
+              <li><span class="sn">{i + 1}</span><span><b>{st.t}</b><small>{st.s}</small></span></li>
+            ))}
+          </ol>
+        </div>
+        <Image class="how-mascot" src={mascotGold} alt="" width={220} loading="lazy" />
+      </article>
+      <div class="feats">
+        {c.feats.map((f) => (
+          <div class="card feat reveal">
+            <div><h3>{f.t}</h3><p>{f.s}</p></div>
+            {f.mock === 'streak' && (
+              <div class="mock streak" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 22c4 0 7-2.7 7-6.6 0-3.6-2.4-5.6-3.6-8.4-.4 1.8-1.4 3-2.6 3.4.3-3.2-1-6-3.8-8.4.2 3.4-1.4 5.4-3 7.2C4.9 10.5 5 12.8 5 15.4 5 19.3 8 22 12 22Z" /></svg>
+                <span><b>12</b><small>{c.streakLabel}</small></span>
+              </div>
+            )}
+            {f.mock === 'badges' && (
+              <div class="mock badges" aria-hidden="true">{c.badges.map((b, k) => <span class={`b b${k}`}>{b}</span>)}</div>
+            )}
+            {f.mock === 'widget' && (
+              <div class="mock widget" aria-hidden="true"><b>{n(8214)}</b><small>{c.widgetLabel}</small><span class="wbar"><i></i></span></div>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- VITRINES -->
+    <section class="shows">
+      <figure class="show reveal">
+        <div class="art a-rank">
+          <Image class="sbg" src={map} alt="" width={800} loading="lazy" />
+          <p class="stitle">{c.shows[0].title}</p>
+          <span class="pin p1"></span><span class="pin p2"></span><span class="pin p3"></span><span class="pin p4"></span><span class="pin p5"></span>
+        </div>
+        <figcaption><b>{c.shows[0].capT}</b><span>{c.shows[0].capS}</span></figcaption>
+      </figure>
+      <figure class="show reveal">
+        <div class="art a-trip">
+          <p class="stitle">{c.shows[1].title}</p>
+          <ol class="legs">
+            {JOURNEYS.filter((j) => ['camino', 'route-66', 'silk-road'].includes(j.id)).map((j) => (
+              <li><span>{fr ? j.fr : j.en}</span><b>{n(j.km)} km</b></li>
+            ))}
+          </ol>
+        </div>
+        <figcaption><b>{c.shows[1].capT}</b><span>{c.shows[1].capS}</span></figcaption>
+      </figure>
+      <figure class="show reveal">
+        <div class="art a-chal">
+          <Image class="sbg" src={stadium} alt="" width={800} loading="lazy" />
+          <p class="stitle">{c.shows[2].title}</p>
+          <div class="avrow">{avatars.map((a) => <span style={`--c:${a.c}`}>{a.i}</span>)}</div>
+        </div>
+        <figcaption><b>{c.shows[2].capT}</b><span>{c.shows[2].capS}</span></figcaption>
+      </figure>
+    </section>
+
+    <!-- VOYAGES -->
+    <section class="journeys" id="journeys">
+      <div class="sec-head"><h2 class="display">{c.journeysTitle}</h2><p>{c.journeysSub}</p></div>
+      <ul class="jgrid">
+        {JOURNEYS.map((j) => (
+          <li class:list={['card', 'jcard', { free: j.free }]}>
+            <span class="jname">{fr ? j.fr : j.en}</span>
+            <span class="jkm">{n(j.km)} km</span>
+            {j.free && <span class="tag">{c.free}</span>}
+            {j.seasonal && <span class="tag season">{c.seasonal}</span>}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- DÉFIS -->
+    <section class="panel chal reveal" id="challenges">
+      <div>
+        <h2 class="display">{c.chTitleA} <span class="hl">{c.chTitleB}</span></h2>
+        <p class="muted">{c.chBody}</p>
+        <ul class="check">{c.chList.map((li) => <li>{li}</li>)}</ul>
+      </div>
+      <div class="well chal-mock" aria-hidden="true">
+        {avatars.slice(0, 4).map((a, k) => (
+          <div class="crow"><span class="cav" style={`--c:${a.c}`}>{a.i}</span><span class="cbar"><i style={`width:${[100, 84, 66, 47][k]}%;background:${a.c}`}></i></span><b>{n([35000, 29400, 23100, 16450][k])}</b></div>
+        ))}
+      </div>
+    </section>
+
+    <!-- PRIX -->
+    <section class="price-sec" id="prix">
+      <h2 class="display">{c.priceTitleA} <span class="hl">{c.priceTitleB}</span></h2>
+      <PricingPanel lang={lang} />
+    </section>
+  </div>
+
+  <Faq items={c.faq} title={c.faqTitle} />
+  <CtaBand lang={lang} />
+</Base>
+
+<style>
+  .stack { display: grid; gap: clamp(16px, 2.4vw, 28px); padding-top: 16px; }
+
+  /* ---------- HERO ---------- */
+  .hero { position: relative; isolation: isolate; display: grid; gap: 28px; align-items: center; padding: clamp(24px, 5vw, 64px) 0 clamp(12px, 3vw, 32px); }
+  @media (min-width: 900px) { .hero { grid-template-columns: 1.08fr 1fr; gap: 24px; min-height: 560px; } }
+  .hero-bg { position: absolute; z-index: -1; inset: -16px calc(-1 * var(--gutter)) 0; overflow: hidden; pointer-events: none; }
+  .hero-bg :global(img) {
+    position: absolute; right: 0; top: 0; width: min(980px, 100%); height: 100%; object-fit: cover; object-position: 50% 40%;
+    opacity: 0.3; filter: saturate(0.7) hue-rotate(20deg);
+    mask-image: radial-gradient(70% 75% at 70% 40%, #000, transparent 75%);
+    -webkit-mask-image: radial-gradient(70% 75% at 70% 40%, #000, transparent 75%);
+  }
+  .hero-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(40% 50% at 75% 45%, rgba(124, 58, 237, 0.22), transparent 70%); }
+  .hero h1 { font-size: clamp(34px, 4.3vw, 58px); }
+  .hero h1 .hl { display: block; margin-top: 4px; }
+  .hero-lede { color: var(--muted); font-size: clamp(16px, 1.5vw, 18px); margin: 24px 0 26px; max-width: 560px; }
+  .hero-lede strong { color: var(--text); font-weight: 600; }
+  .try { min-height: 54px; padding: 0 20px; font-size: 16px; border-radius: 14px; }
+  .trust { list-style: none; margin: 30px 0 0; padding: 22px 0 0; border-top: 1px solid var(--border); display: grid; gap: 14px; grid-template-columns: 1fr; max-width: 640px; }
+  @media (min-width: 560px) { .trust { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+  .trust li { display: flex; align-items: center; gap: 11px; }
+  .ti { width: 38px; height: 38px; flex: none; display: grid; place-items: center; border-radius: 11px; background: rgba(124, 58, 237, 0.14); border: 1px solid rgba(124, 58, 237, 0.35); color: #c4b5fd; }
+  .ti svg { width: 19px; height: 19px; }
+  .trust b { display: block; font-family: var(--font-display); font-weight: 600; font-size: 15px; line-height: 1.25; }
+  .trust small { display: block; color: var(--faint); font-size: 13px; line-height: 1.3; }
+  .hero-art { position: relative; overflow-x: clip; overflow-y: visible; padding: 0 6px; }
+  @media (max-width: 899px) { .hero-art { order: -1; margin: 0 auto -6px; width: 100%; max-width: 420px; } }
+
+  /* ---------- BENTO ---------- */
+  .bento { display: grid; gap: 12px; scroll-margin-top: 80px; }
+  @media (min-width: 1000px) { .bento { grid-template-columns: 1.15fr 1fr; gap: 16px; } }
+  .how { position: relative; overflow: hidden; border-radius: var(--radius-lg); border: 1px solid rgba(124, 58, 237, 0.35); background: radial-gradient(80% 90% at 100% 100%, rgba(124, 58, 237, 0.35), transparent 65%), linear-gradient(160deg, #1e1a3a, #141030); display: grid; align-items: center; }
+  @media (min-width: 640px) { .how { grid-template-columns: 1.5fr 1fr; } }
+  .how-body { padding: clamp(22px, 3vw, 32px); position: relative; z-index: 1; }
+  .how h2 { font-size: clamp(24px, 2.8vw, 34px); }
+  .steps { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 10px; }
+  .steps li { display: flex; gap: 14px; align-items: flex-start; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; }
+  .sn { flex: none; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-family: var(--font-brand); font-weight: 900; color: #fff; background: var(--grad); }
+  .steps b { display: block; font-weight: 600; font-size: 15px; }
+  .steps small { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+  .how :global(.how-mascot) { justify-self: center; width: min(180px, 50%); height: auto; margin: 0 0 24px; filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5)); transform: rotate(-6deg); }
+  @media (max-width: 639px) { .how :global(.how-mascot) { display: none; } }
+
+  .feats { display: grid; gap: 12px; }
+  .feat { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; padding: 18px 20px; }
+  .feat h3 { font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+  .feat p { margin: 5px 0 0; color: var(--muted); font-size: 14px; max-width: 380px; }
+  .mock { display: flex; align-items: center; }
+  .streak { gap: 8px; }
+  .streak svg { width: 34px; height: 34px; fill: #fb923c; filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.6)); }
+  .streak b { display: block; font-family: var(--font-brand); font-weight: 900; font-size: 30px; line-height: 1; }
+  .streak small { font-size: 12px; color: var(--faint); }
+  .badges { position: relative; width: 150px; height: 64px; }
+  .badges .b { position: absolute; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #fff; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4); white-space: nowrap; }
+  .b0 { right: 0; top: 0; background: linear-gradient(90deg, #f97316, #fb923c); transform: rotate(-4deg); }
+  .b1 { left: 0; top: 22px; background: linear-gradient(90deg, #7c3aed, #d946ef); transform: rotate(3deg); }
+  .b2 { right: 6px; bottom: 0; background: linear-gradient(90deg, #2563eb, #3b82f6); }
+  .widget { flex-direction: column; align-items: flex-start; width: 120px; padding: 12px; border-radius: 18px; background: linear-gradient(160deg, #2a3a52, #3d365a); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45); }
+  .widget b { font-family: var(--font-brand); font-weight: 900; font-size: 24px; line-height: 1; }
+  .widget small { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .wbar { display: block; width: 100%; height: 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.12); margin-top: 8px; overflow: hidden; }
+  .wbar i { display: block; width: 82%; height: 100%; background: var(--grad); }
+  @media (max-width: 420px) { .feat { grid-template-columns: 1fr; } .mock { justify-content: flex-start; } }
+
+  /* ---------- VITRINES ---------- */
+  .shows { display: grid; gap: 16px; }
+  @media (min-width: 900px) { .shows { grid-template-columns: repeat(3, 1fr); } }
+  .show { margin: 0; }
+  .art { position: relative; overflow: hidden; border-radius: var(--radius-lg); aspect-ratio: 1.3; border: 1px solid var(--border); isolation: isolate; }
+  .art :global(.sbg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
+  .stitle { position: absolute; left: 22px; top: 18px; margin: 0; z-index: 3; font-family: var(--font-brand); font-weight: 900; font-size: clamp(22px, 2.2vw, 28px); color: #fff; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45); }
+  .a-rank { background: #0b1d3a; }
+  .a-rank :global(.sbg) { opacity: 0.85; filter: invert(1) hue-rotate(180deg) saturate(1.4) brightness(0.75); }
+  .a-rank::after { content: ''; position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, rgba(13, 11, 30, 0.55), rgba(13, 11, 30, 0.1) 45%, rgba(13, 11, 30, 0.55)); }
+  .pin { position: absolute; z-index: 2; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px rgba(249, 115, 22, 0.25), 0 0 20px rgba(249, 115, 22, 0.9); animation: pulse 2.4s ease-in-out infinite; }
+  .p1 { left: 49%; top: 40%; } .p2 { left: 84%; top: 44%; animation-delay: 0.4s; } .p3 { left: 26%; top: 47%; animation-delay: 0.8s; } .p4 { left: 35%; top: 72%; animation-delay: 1.2s; } .p5 { left: 66%; top: 52%; animation-delay: 1.6s; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0), 0 0 20px rgba(249, 115, 22, 0.9); } }
+  .a-trip { background: radial-gradient(70% 70% at 80% 90%, rgba(249, 115, 22, 0.55), transparent 60%), linear-gradient(140deg, #2d1b69, #7c3aed 55%, #d946ef); }
+  .legs { position: absolute; z-index: 2; left: 20px; right: 20px; bottom: 18px; list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+  .legs li { display: flex; justify-content: space-between; gap: 10px; padding: 9px 12px; border-radius: 12px; background: rgba(13, 11, 30, 0.72); backdrop-filter: blur(4px); font-size: 14px; font-weight: 600; }
+  .legs b { font-family: var(--font-brand); font-weight: 900; color: #fdba74; }
+  .a-chal :global(.sbg) { opacity: 0.7; }
+  .a-chal::after { content: ''; position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, rgba(13, 11, 30, 0.6), rgba(45, 27, 105, 0.35) 50%, rgba(13, 11, 30, 0.8)); }
+  .avrow { position: absolute; z-index: 2; left: 22px; bottom: 22px; display: flex; }
+  .avrow span { width: 46px; height: 46px; margin-right: -10px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: #fff; background: var(--c); border: 3px solid #1e1a3a; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4); }
+  figcaption { margin-top: 12px; display: grid; gap: 3px; }
+  figcaption b { font-family: var(--font-display); font-weight: 600; color: var(--text); font-size: 17px; }
+  figcaption span { color: var(--muted); font-size: 15px; }
+
+  /* ---------- VOYAGES ---------- */
+  .journeys { scroll-margin-top: 80px; margin-top: 8px; }
+  .sec-head { max-width: 760px; margin-bottom: 18px; }
+  .sec-head h2 { font-size: clamp(26px, 3.2vw, 38px); }
+  .sec-head p { margin: 10px 0 0; color: var(--muted); }
+  .jgrid { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+  .jcard { position: relative; display: grid; gap: 4px; padding: 16px 18px; }
+  .jcard.free { border-color: rgba(16, 185, 129, 0.5); }
+  .jname { font-weight: 600; font-size: 15px; padding-right: 92px; }
+  .jkm { font-family: var(--font-brand); font-weight: 900; font-size: 22px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .jcard .tag { position: absolute; right: 14px; top: 14px; background: var(--good); color: #052e22; }
+  .jcard .tag.season { background: rgba(255, 255, 255, 0.1); color: var(--muted); }
+
+  /* ---------- DÉFIS ---------- */
+  .chal { display: grid; gap: 22px; align-items: center; padding: clamp(20px, 3vw, 32px); scroll-margin-top: 80px; }
+  @media (min-width: 900px) { .chal { grid-template-columns: 1.1fr 1fr; gap: 32px; } }
+  .chal h2 { font-size: clamp(26px, 3vw, 38px); }
+  .chal p { margin: 12px 0 0; }
+  .well { background: var(--well); border: 1px solid var(--border); border-radius: 18px; padding: 18px; box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.5); }
+  .chal-mock { display: grid; gap: 14px; }
+  .crow { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; }
+  .cav { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: #fff; background: var(--c); }
+  .cbar { height: 10px; border-radius: 99px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+  .cbar i { display: block; height: 100%; border-radius: 99px; }
+  .crow b { font-family: var(--font-brand); font-weight: 900; font-size: 15px; min-width: 62px; text-align: right; }
+
+  /* ---------- PRIX ---------- */
+  .price-sec { display: grid; gap: 16px; justify-items: start; scroll-margin-top: 80px; }
+  .price-sec h2 { font-size: clamp(28px, 3.6vw, 42px); }
+  .price-sec :global(.pricing) { width: 100%; }
+  @media (prefers-reduced-motion: reduce) { .pin { animation: none; } }
+</style>
