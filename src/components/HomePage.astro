@@ -9,7 +9,8 @@ import CardFan from './CardFan.astro'
 import stadium from '../assets/art/stadium.png'
 import map from '../assets/art/map-monde.jpg'
 import mascotGold from '../assets/art/mascot-gold.png'
-import { FACTS, JOURNEYS, PRICES, SITE, formatNumber, formatPrice, type Lang } from '../data/product'
+import JourneyCover from './JourneyCover.astro'
+import { FACTS, JOURNEYS, PRICES, SITE, formatDuration, formatNumber, formatPrice, journeyDays, type Lang } from '../data/product'
 import { ROUTES } from '../i18n/ui'
 import { app, faqPage, organization, website } from '../data/schema'
 
@@ -19,6 +20,8 @@ const fr = lang === 'fr'
 const p = (v: number) => formatPrice(v, lang)
 const n = (v: number) => formatNumber(v, lang)
 const longest = JOURNEYS[JOURNEYS.length - 1]
+const inca = JOURNEYS.find((j) => j.id === 'inca-trail')!
+const tdf = JOURNEYS.find((j) => j.id === 'tour-de-france')!
 
 const c = fr
   ? {
@@ -26,19 +29,19 @@ const c = fr
       description: `Movebel transforme tes pas en points pour ton pays : classement mondial entre ${FACTS.countries} pays, défis entre amis et voyages à pied. Gratuit sur iPhone, avec Apple Santé.`,
       h1a: 'Tu ne peux pas marquer pour ton pays.',
       h1b: 'Mais tu peux marcher pour lui.',
-      lede: `Movebel est une app iPhone gratuite qui transforme tes pas en points pour ton pays.`,
-      lede2: `Ton pays affronte ${FACTS.countries} nations au classement mondial, et chaque marche compte.`,
+      lede: 'Movebel transforme tes pas en points pour ton pays.',
+      lede2: `Choisis ton camp parmi ${FACTS.countries} pays, marche comme d’habitude, et regarde ton pays grimper au classement mondial.`,
       howCta: 'Comment ça marche',
       trust: [
         { t: 'Gratuit', s: 'Movebel+ en option', svg: 'M20 12v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8M2 8h20v4H2zM12 21V8m0 0H7.5a2.5 2.5 0 1 1 0-5C11 3 12 8 12 8Zm0 0h4.5a2.5 2.5 0 1 0 0-5C13 3 12 8 12 8Z' },
         { t: `${FACTS.countries} pays`, s: 'Un seul classement mondial', svg: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm-9 9h18M12 3c2.6 2.8 3.9 5.8 3.9 9s-1.3 6.2-3.9 9c-2.6-2.8-3.9-5.8-3.9-9S9.4 5.8 12 3Z' },
         { t: 'Apple Santé', s: 'Tes pas, sans rien saisir', svg: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z' },
       ],
-      howTitle: 'Trois étapes, puis tu marches.',
+      howTitle: 'Tu règles tout une fois. Ensuite, tu marches.',
       steps: [
-        { t: 'Choisis ton pays', s: `${FACTS.countries} nations au choix. Tu le représenteras au classement mondial.` },
-        { t: 'Connecte Apple Santé', s: 'Tes pas se synchronisent tout seuls, sans saisie.' },
-        { t: 'Marche comme d’habitude', s: 'Chaque pas validé fait monter ton pays au classement.' },
+        { t: 'Choisis ton pays', s: `${FACTS.countries} pays au choix. C’est lui que tu représentes au classement.` },
+        { t: 'Connecte Apple Santé', s: 'Tes pas arrivent tout seuls, rien à saisir.' },
+        { t: 'Marche comme d’habitude', s: 'Le trajet au travail, les courses, la balade du soir : tout compte pour ton pays.' },
       ],
       feats: [
         { t: 'Ta série', s: 'Atteins ton objectif chaque jour et garde la flamme. Avec Movebel+, un bouclier par mois protège un jour manqué.', mock: 'streak' },
@@ -50,12 +53,14 @@ const c = fr
       badges: ['10 000 pas', '7 jours', 'Saison'],
       shows: [
         { title: 'Classement mondial', capT: 'Ton pays contre le reste du monde', capS: 'Le classement bouge avec les pas de chaque marcheur.' },
-        { title: 'Voyages', capT: 'Tes pas deviennent un voyage', capS: `Du Chemin de l’Inca à la Route de la soie, ${n(longest.km)} km.` },
-        { title: 'Défis', capT: 'Qui marche le plus cette semaine ?', capS: 'Crée un défi, envoie le lien, suivez-vous.' },
+        { title: 'Voyages', capT: 'Tes pas deviennent un voyage', capS: 'Ta marche du jour te fait avancer sur une vraie carte, ville après ville.' },
+        { title: 'Défis', capT: 'Qui marche le plus cette semaine ?', capS: 'Crée un défi, envoie le lien, et la course commence.' },
       ],
-      journeysTitle: `${JOURNEYS.length} voyages à faire à pied`,
-      journeysSub: `Tes vrais pas te font avancer sur un vrai parcours, étape par étape. Lumière est gratuit ; les autres voyages font partie de Movebel+.`,
-      free: 'Gratuit', seasonal: 'Saisonnier',
+      journeysTitle: 'Jusqu’où iront tes pas ?',
+      journeysSub: `${JOURNEYS.length} voyages, de ${n(JOURNEYS[0].km)} à ${n(longest.km)} km. À 10 000 pas par jour, le Chemin de l’Inca se boucle en ${formatDuration(journeyDays(inca.km), lang)}, le Tour de France en ${formatDuration(journeyDays(tdf.km), lang, true)}.`,
+      journeysNote: 'Lumière est gratuit ; les autres voyages font partie de Movebel+. Durées estimées à 10 000 pas par jour.',
+      free: 'Gratuit', stagesWord: 'étapes',
+      freeLead: 'Ton premier voyage est offert : une île imaginaire en six étapes, pour voir tes pas avancer sur la carte dès le premier jour.',
       chTitleA: 'Tes amis,', chTitleB: 'ton meilleur coach.',
       chBody: `Crée un défi en quelques secondes (par défaut ${FACTS.challengeTemplate.days} jours et ${n(FACTS.challengeTemplate.steps)} pas chacun), partage le lien, et voyez qui tient la distance.`,
       chList: [
@@ -80,19 +85,19 @@ const c = fr
       description: `Movebel turns your steps into points for your country: a leaderboard across ${FACTS.countries} countries, challenges with friends and walking journeys. Free on iPhone.`,
       h1a: 'You can’t score for your country.',
       h1b: 'But you can walk for it.',
-      lede: 'Movebel is a free iPhone app that turns your steps into points for your country.',
-      lede2: `Your country takes on ${FACTS.countries} nations on the global leaderboard, and every walk counts.`,
+      lede: 'Movebel turns your steps into points for your country.',
+      lede2: `Pick your side among ${FACTS.countries} countries, walk as usual, and watch your country climb the global leaderboard.`,
       howCta: 'How it works',
       trust: [
         { t: 'Free', s: 'Movebel+ is optional', svg: 'M20 12v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8M2 8h20v4H2zM12 21V8m0 0H7.5a2.5 2.5 0 1 1 0-5C11 3 12 8 12 8Zm0 0h4.5a2.5 2.5 0 1 0 0-5C13 3 12 8 12 8Z' },
         { t: `${FACTS.countries} countries`, s: 'One global leaderboard', svg: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm-9 9h18M12 3c2.6 2.8 3.9 5.8 3.9 9s-1.3 6.2-3.9 9c-2.6-2.8-3.9-5.8-3.9-9S9.4 5.8 12 3Z' },
         { t: 'Apple Health', s: 'Your steps, no typing', svg: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z' },
       ],
-      howTitle: 'Three steps, then you walk.',
+      howTitle: 'Set it up once. Then just walk.',
       steps: [
-        { t: 'Pick your country', s: `${FACTS.countries} nations to choose from. You represent it on the global leaderboard.` },
-        { t: 'Connect Apple Health', s: 'Your steps sync on their own, nothing to type.' },
-        { t: 'Walk as usual', s: 'Every validated step pushes your country up the leaderboard.' },
+        { t: 'Pick your country', s: `${FACTS.countries} countries to choose from. That’s who you walk for.` },
+        { t: 'Connect Apple Health', s: 'Your steps come in on their own, nothing to type.' },
+        { t: 'Walk as usual', s: 'The commute, the groceries, the evening stroll: it all counts for your country.' },
       ],
       feats: [
         { t: 'Your streak', s: 'Hit your goal every day and keep the flame alive. With Movebel+, one shield a month protects a missed day.', mock: 'streak' },
@@ -104,12 +109,14 @@ const c = fr
       badges: ['10,000 steps', '7 days', 'Season'],
       shows: [
         { title: 'Global leaderboard', capT: 'Your country against the world', capS: 'The leaderboard moves with every walker’s steps.' },
-        { title: 'Journeys', capT: 'Your steps become a journey', capS: `From the Inca Trail to the Silk Road, ${n(longest.km)} km.` },
-        { title: 'Challenges', capT: 'Who walks the most this week?', capS: 'Create a challenge, send the link, keep up with each other.' },
+        { title: 'Journeys', capT: 'Your steps become a journey', capS: 'Today’s walk moves you along a real map, city after city.' },
+        { title: 'Challenges', capT: 'Who walks the most this week?', capS: 'Create a challenge, send the link, and the race is on.' },
       ],
-      journeysTitle: `${JOURNEYS.length} journeys to walk`,
-      journeysSub: 'Your real steps move you along a real route, stage by stage. Lumière is free; the other journeys come with Movebel+.',
-      free: 'Free', seasonal: 'Seasonal',
+      journeysTitle: 'How far will your steps take you?',
+      journeysSub: `${JOURNEYS.length} journeys, from ${n(JOURNEYS[0].km)} to ${n(longest.km)} km. At 10,000 steps a day, the Inca Trail takes ${formatDuration(journeyDays(inca.km), lang)} and the Tour de France ${formatDuration(journeyDays(tdf.km), lang, true)}.`,
+      journeysNote: 'Lumière is free; the other journeys come with Movebel+. Durations estimated at 10,000 steps a day.',
+      free: 'Free', stagesWord: 'stages',
+      freeLead: 'Your first journey is on us: an imaginary island in six stages, so you see your steps move on the map from day one.',
       chTitleA: 'Your friends,', chTitleB: 'your best coach.',
       chBody: `Create a challenge in seconds (${FACTS.challengeTemplate.days} days and ${n(FACTS.challengeTemplate.steps)} steps each by default), share the link, and see who goes the distance.`,
       chList: [
@@ -171,7 +178,14 @@ const avatars = [
             ))}
           </ol>
         </div>
-        <Image class="how-mascot" src={mascotGold} alt="" width={220} loading="lazy" />
+        <div class="how-art" aria-hidden="true">
+          <svg class="prints" viewBox="0 0 200 320">
+            {[[40, 300, -18], [78, 272, 12], [62, 232, -14], [102, 206, 16], [86, 166, -10], [128, 142, 20]].map(([x, y, r], k) => (
+              <g transform={`translate(${x} ${y}) rotate(${r})`} opacity={0.18 + k * 0.1}><ellipse rx="7" ry="12" /><circle cx="-4" cy="-17" r="2.4" /><circle cx="0" cy="-19" r="2.6" /><circle cx="4.4" cy="-17.4" r="2.3" /></g>
+            ))}
+          </svg>
+          <Image class="how-mascot" src={mascotGold} alt="" width={260} loading="lazy" />
+        </div>
       </article>
       <div class="feats">
         {c.feats.map((f) => (
@@ -206,12 +220,13 @@ const avatars = [
       </figure>
       <figure class="show reveal">
         <div class="art a-trip">
+          <JourneyCover id="tour-de-france" class="sbg" />
           <p class="stitle">{c.shows[1].title}</p>
-          <ol class="legs">
-            {JOURNEYS.filter((j) => ['camino', 'route-66', 'silk-road'].includes(j.id)).map((j) => (
-              <li><span>{fr ? j.fr : j.en}</span><b>{n(j.km)} km</b></li>
-            ))}
-          </ol>
+          <div class="leg-card">
+            <div class="leg-top"><b>Tour de France</b><span>{n(910)} / {n(tdf.km)} km</span></div>
+            <div class="leg-track"><i style="width:38%"></i>{[0, 9.4, 20.4, 37.9, 51, 68, 78, 92.7, 100].map((x, k) => <span class:list={['dot', { done: x <= 37.9, now: k === 3 }]} style={`left:${x}%`}></span>)}</div>
+            <div class="leg-cities"><span>Paris</span><span class="cur">Lyon</span><span>Paris</span></div>
+          </div>
         </div>
         <figcaption><b>{c.shows[1].capT}</b><span>{c.shows[1].capS}</span></figcaption>
       </figure>
@@ -230,14 +245,23 @@ const avatars = [
       <div class="sec-head"><h2 class="display">{c.journeysTitle}</h2><p>{c.journeysSub}</p></div>
       <ul class="jgrid">
         {JOURNEYS.map((j) => (
-          <li class:list={['card', 'jcard', { free: j.free }]}>
-            <span class="jname">{fr ? j.fr : j.en}</span>
-            <span class="jkm">{n(j.km)} km</span>
-            {j.free && <span class="tag">{c.free}</span>}
-            {j.seasonal && <span class="tag season">{c.seasonal}</span>}
+          <li class:list={['jcard', { free: j.free }]}>
+            <div class="jart">
+              <JourneyCover id={j.id} />
+              <span class="jkm">{n(j.km)} km</span>
+              {j.free && <span class="tag">{c.free}</span>}
+              {j.season && <span class="tag season">{fr ? j.season.fr : j.season.en}</span>}
+            </div>
+            <div class="jbody">
+              <b class="jname">{fr ? j.fr : j.en}</b>
+              <span class="jroute">{fr ? j.route.fr : j.route.en}</span>
+              {j.free && <p class="jlead">{c.freeLead}</p>}
+              <span class="jmeta"><span>{j.stops} {c.stagesWord}</span><span>{formatDuration(journeyDays(j.km), lang)}</span></span>
+            </div>
           </li>
         ))}
       </ul>
+      <p class="jnote">{c.journeysNote}</p>
     </section>
 
     <!-- DÉFIS -->
@@ -274,7 +298,7 @@ const avatars = [
   .hero-bg { position: absolute; z-index: -1; inset: -16px calc(-1 * var(--gutter)) 0; overflow: hidden; pointer-events: none; }
   .hero-bg :global(img) {
     position: absolute; right: 0; top: 0; width: min(980px, 100%); height: 100%; object-fit: cover; object-position: 50% 40%;
-    opacity: 0.3; filter: saturate(0.7) hue-rotate(20deg);
+    opacity: 0.42; filter: saturate(0.8) hue-rotate(20deg);
     mask-image: radial-gradient(70% 75% at 70% 40%, #000, transparent 75%);
     -webkit-mask-image: radial-gradient(70% 75% at 70% 40%, #000, transparent 75%);
   }
@@ -306,8 +330,10 @@ const avatars = [
   .sn { flex: none; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-family: var(--font-brand); font-weight: 900; color: #fff; background: var(--grad); }
   .steps b { display: block; font-weight: 600; font-size: 15px; }
   .steps small { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
-  .how :global(.how-mascot) { justify-self: center; width: min(180px, 50%); height: auto; margin: 0 0 24px; filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5)); transform: rotate(-6deg); }
-  @media (max-width: 639px) { .how :global(.how-mascot) { display: none; } }
+  .how-art { position: relative; align-self: stretch; min-height: 260px; }
+  .prints { position: absolute; inset: 6% 0 0 -10%; width: 110%; height: 94%; fill: #fbbf24; }
+  .how-art :global(.how-mascot) { position: absolute; right: 10%; top: 10%; width: min(200px, 72%); height: auto; filter: drop-shadow(0 0 40px rgba(251, 191, 36, 0.35)) drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5)); transform: rotate(-6deg); }
+  @media (max-width: 639px) { .how-art { display: none; } }
 
   .feats { display: grid; gap: 12px; }
   .feat { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; padding: 18px 20px; }
@@ -343,10 +369,20 @@ const avatars = [
   .pin { position: absolute; z-index: 2; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px rgba(249, 115, 22, 0.25), 0 0 20px rgba(249, 115, 22, 0.9); animation: pulse 2.4s ease-in-out infinite; }
   .p1 { left: 49%; top: 40%; } .p2 { left: 84%; top: 44%; animation-delay: 0.4s; } .p3 { left: 26%; top: 47%; animation-delay: 0.8s; } .p4 { left: 35%; top: 72%; animation-delay: 1.2s; } .p5 { left: 66%; top: 52%; animation-delay: 1.6s; }
   @keyframes pulse { 50% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0), 0 0 20px rgba(249, 115, 22, 0.9); } }
-  .a-trip { background: radial-gradient(70% 70% at 80% 90%, rgba(249, 115, 22, 0.55), transparent 60%), linear-gradient(140deg, #2d1b69, #7c3aed 55%, #d946ef); }
-  .legs { position: absolute; z-index: 2; left: 20px; right: 20px; bottom: 18px; list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
-  .legs li { display: flex; justify-content: space-between; gap: 10px; padding: 9px 12px; border-radius: 12px; background: rgba(13, 11, 30, 0.72); backdrop-filter: blur(4px); font-size: 14px; font-weight: 600; }
-  .legs b { font-family: var(--font-brand); font-weight: 900; color: #fdba74; }
+  .a-trip { background: #584a7c; }
+  .a-trip :global(.sbg) { transform: scale(1.02); }
+  .a-trip::after { content: ''; position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, rgba(13, 11, 30, 0.35), transparent 30%, transparent 50%, rgba(13, 11, 30, 0.7)); }
+  .leg-card { position: absolute; z-index: 2; left: 16px; right: 16px; bottom: 16px; padding: 12px 14px 10px; border-radius: 14px; background: rgba(13, 11, 30, 0.8); backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.1); }
+  .leg-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .leg-top b { font-family: var(--font-brand); font-weight: 900; font-size: 16px; }
+  .leg-top span { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .leg-track { position: relative; height: 6px; margin: 12px 4px 8px; border-radius: 99px; background: rgba(255, 255, 255, 0.14); }
+  .leg-track i { position: absolute; inset: 0 auto 0 0; border-radius: 99px; background: var(--grad); }
+  .leg-track .dot { position: absolute; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #3a3456; box-shadow: 0 0 0 2px rgba(13, 11, 30, 0.9); }
+  .leg-track .dot.done { background: #fff; }
+  .leg-track .dot.now { width: 14px; height: 14px; margin: -7px 0 0 -7px; background: var(--accent); box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.35), 0 0 14px rgba(249, 115, 22, 0.9); }
+  .leg-cities { position: relative; display: flex; justify-content: space-between; font-size: 12px; color: var(--faint); }
+  .leg-cities .cur { position: absolute; left: 37.9%; transform: translateX(-50%); color: var(--accent-hot); font-weight: 700; }
   .a-chal :global(.sbg) { opacity: 0.7; }
   .a-chal::after { content: ''; position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, rgba(13, 11, 30, 0.6), rgba(45, 27, 105, 0.35) 50%, rgba(13, 11, 30, 0.8)); }
   .avrow { position: absolute; z-index: 2; left: 22px; bottom: 22px; display: flex; }
@@ -360,13 +396,37 @@ const avatars = [
   .sec-head { max-width: 760px; margin-bottom: 18px; }
   .sec-head h2 { font-size: clamp(26px, 3.2vw, 38px); }
   .sec-head p { margin: 10px 0 0; color: var(--muted); }
-  .jgrid { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
-  .jcard { position: relative; display: grid; gap: 4px; padding: 16px 18px; }
-  .jcard.free { border-color: rgba(16, 185, 129, 0.5); }
-  .jname { font-weight: 600; font-size: 15px; padding-right: 92px; }
-  .jkm { font-family: var(--font-brand); font-weight: 900; font-size: 22px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .jcard .tag { position: absolute; right: 14px; top: 14px; background: var(--good); color: #052e22; }
-  .jcard .tag.season { background: rgba(255, 255, 255, 0.1); color: var(--muted); }
+  .jgrid { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+  .jcard.free { grid-column: span 2; }
+  @media (min-width: 1000px) { .jgrid { grid-template-columns: repeat(4, 1fr); } .jcard.free { grid-row: span 2; } .jcard.free .jart { flex: 1; aspect-ratio: auto; min-height: 220px; } .jcard.free .jkm { font-size: 34px; left: 18px; bottom: 14px; } .jcard.free .jbody { padding: 16px 18px 18px; } .jcard.free .jname { font-size: 20px; } }
+  .jlead { margin: 6px 0 0; font-size: 14px; color: var(--muted); max-width: 46ch; }
+  .jcard { display: flex; flex-direction: column; position: relative; overflow: hidden; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); transition: transform 0.25s, border-color 0.25s; }
+  .jcard:hover { transform: translateY(-3px); border-color: var(--border-strong); }
+  .jcard.free { border-color: rgba(16, 185, 129, 0.55); }
+  .jart { position: relative; aspect-ratio: 16 / 9; }
+  .jart::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(13, 11, 30, 0.65)); }
+  .jkm { position: absolute; z-index: 1; left: 12px; bottom: 9px; font-family: var(--font-brand); font-weight: 900; font-size: 22px; color: #fff; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); }
+  .jcard .tag { position: absolute; z-index: 1; right: 10px; top: 10px; background: var(--good); color: #052e22; }
+  .jcard .tag.season { background: rgba(13, 11, 30, 0.75); color: #fde68a; backdrop-filter: blur(4px); }
+  .jbody { display: grid; gap: 3px; padding: 12px 14px 14px; }
+  .jname { font-family: var(--font-display); font-weight: 600; font-size: 16px; line-height: 1.3; }
+  .jroute { font-size: 13px; color: var(--muted); line-height: 1.35; }
+  .jmeta { display: flex; gap: 8px; margin-top: 8px; }
+  .jmeta span { font-size: 12px; font-weight: 600; color: var(--muted); background: rgba(255, 255, 255, 0.06); border-radius: 999px; padding: 3px 9px; }
+  .jmeta span + span { color: #fdba74; background: rgba(249, 115, 22, 0.12); }
+  .jnote { margin: 14px 0 0; font-size: 13px; color: var(--faint); }
+
+  @media (max-width: 559px) {
+    .jgrid { gap: 10px; }
+    .jkm { font-size: 17px; left: 10px; bottom: 6px; }
+    .jbody { padding: 10px 11px 12px; }
+    .jname { font-size: 14px; }
+    .jroute { font-size: 12px; }
+    .jmeta { flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .jmeta span { font-size: 11px; padding: 2px 7px; }
+    .jcard .tag { font-size: 10px; right: 6px; top: 6px; }
+    .jcard.free .jkm { font-size: 24px; }
+  }
 
   /* ---------- DÉFIS ---------- */
   .chal { display: grid; gap: 22px; align-items: center; padding: clamp(20px, 3vw, 32px); scroll-margin-top: 80px; }
@@ -382,7 +442,10 @@ const avatars = [
   .crow b { font-family: var(--font-brand); font-weight: 900; font-size: 15px; min-width: 62px; text-align: right; }
 
   /* ---------- PRIX ---------- */
-  .price-sec { display: grid; gap: 16px; justify-items: start; scroll-margin-top: 80px; }
+  .price-sec { display: grid; gap: 16px; justify-items: center; text-align: center; scroll-margin-top: 80px; padding-top: 12px; }
+  .price-sec :global(.plans) { width: 100%; margin-inline: auto; text-align: left; }
+  .price-sec :global(.pricing) { display: grid; justify-items: center; }
+  .price-sec :global(.pricing .trust), .price-sec :global(.pricing .foot) { justify-content: center; }
   .price-sec h2 { font-size: clamp(28px, 3.6vw, 42px); }
   .price-sec :global(.pricing) { width: 100%; }
   @media (prefers-reduced-motion: reduce) { .pin { animation: none; } }

@@ -4,7 +4,7 @@ import type { APIRoute } from 'astro'
 import { FACTS, JOURNEYS, PRICES, PUBLISHER, SITE, STORES } from '../data/product'
 
 export const GET: APIRoute = () => {
-  const journeys = JOURNEYS.map((j) => `${j.en} (${j.km} km${j.free ? ', free' : ''}${j.seasonal ? ', seasonal' : ''})`).join(', ')
+  const journeys = JOURNEYS.map((j) => `${j.en} (${j.km} km${j.free ? ', free' : ''}${j.season ? `, seasonal: ${j.season.en}` : ''})`).join(', ')
   const body = `# Movebel
 
 > Movebel is a free iPhone app that turns your daily steps into points for your country. Users pick one of ${FACTS.countries} countries, connect Apple Health, and their steps add to their country's total on a global leaderboard. It also offers streaks, badges, ranks, challenges with friends and virtual walking journeys along real routes. Available in English and French. Published by ${PUBLISHER.name} (France).

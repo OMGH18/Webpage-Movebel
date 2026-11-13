@@ -1,8 +1,7 @@
 ---
 // Éventail de l'ouverture : trois écrans types de Movebel (voyage, classement
 // des pays, défi entre amis). Illustrations, pas de vraies données.
-import { Image } from 'astro:assets'
-import map from '../assets/art/map-monde.jpg'
+import JourneyCover from './JourneyCover.astro'
 import { FACTS, formatNumber, type Lang } from '../data/product'
 
 interface Props { lang: Lang }
@@ -28,10 +27,8 @@ const members = [
   <div class="holo c-left">
     <div class="face">
       <div class="art trip">
-        <Image class="bg" src={map} alt="" width={460} loading="eager" />
-        <svg class="route" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M18 78 C 30 40, 52 70, 62 42 S 84 22, 86 18" /></svg>
-        <span class="stop s1"></span><span class="stop s2"></span><span class="stop s3 now"></span><span class="stop s4"></span>
-        <span class="city">Lyon · 910 km</span>
+        <JourneyCover id="tour-de-france" class="bg" />
+        <span class="city">{fr ? 'Étape : Lyon' : 'Stage: Lyon'}</span>
       </div>
       <div class="foot"><b>Tour de France</b><small>{n(910)} / {n(2400)} km</small><span class="bar"><i style="width:38%"></i></span></div>
     </div>
@@ -42,7 +39,7 @@ const members = [
         <p class="ct">{fr ? 'Défi entre amis' : 'Friends challenge'}</p>
         <ul>
           {members.map((m) => (
-            <li><span class="av" style={`--c:${m.c}`}>{m.i}</span><span class="bar"><i style={`width:${m.pct}%;background:${m.c}`}></i></span></li>
+            <li><span class="bar"><i style={`width:${m.pct}%;background:${m.c}`}></i></span><span class="av" style={`--c:${m.c}`}>{m.i}</span></li>
           ))}
         </ul>
       </div>
@@ -124,20 +121,14 @@ const members = [
   .rank .bar { height: calc(var(--w) * 0.022); }
 
   /* Voyage */
-  .trip { padding: 0; background: #0f1b3a; }
-  .trip :global(.bg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 48% 30%; transform: scale(2.2); transform-origin: 48% 32%; opacity: 0.55; filter: saturate(0.8) hue-rotate(10deg); }
-  .trip::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13, 11, 30, 0.2), rgba(13, 11, 30, 0.7)); }
-  .route { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .route path { fill: none; stroke: #fb923c; stroke-width: 1.6; stroke-dasharray: 3 2.5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-  .stop { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25); transform: translate(-50%, -50%); }
-  .s1 { left: 18%; top: 78%; } .s2 { left: 40%; top: 56%; } .s3 { left: 62%; top: 42%; } .s4 { left: 86%; top: 18%; background: rgba(255, 255, 255, 0.5); }
-  .stop.now { width: 13px; height: 13px; background: var(--accent); box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.35), 0 0 18px rgba(249, 115, 22, 0.8); }
-  .city { position: absolute; left: 56%; top: 49%; font-size: calc(var(--w) * 0.05); font-weight: 700; color: #fff; background: rgba(13, 11, 30, 0.8); padding: 2px 7px; border-radius: 6px; white-space: nowrap; transform: translateX(-30%); }
+  .trip { padding: 0; background: #584a7c; }
+  .trip :global(.bg) { position: absolute; inset: 0; }
+  .city { position: absolute; left: 50%; bottom: 10%; transform: translateX(-50%) rotate(0); font-size: calc(var(--w) * 0.055); font-weight: 700; color: #fff; background: rgba(13, 11, 30, 0.8); padding: 3px 9px; border-radius: 999px; white-space: nowrap; border: 1px solid rgba(249, 115, 22, 0.6); }
 
   /* Défi */
   .challenge { background: radial-gradient(90% 70% at 50% 0%, rgba(217, 70, 239, 0.25), transparent 70%), #17112e; }
   .challenge ul { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(var(--w) * 0.05); }
-  .challenge li { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: calc(var(--w) * 0.04); }
+  .challenge li { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: calc(var(--w) * 0.04); }
   .av { width: calc(var(--w) * 0.12); height: calc(var(--w) * 0.12); border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: calc(var(--w) * 0.055); color: #fff; background: var(--c); }
   .challenge .bar { height: calc(var(--w) * 0.035); }
 
